@@ -1,4 +1,6 @@
-﻿using eazy.sms.Model;
+﻿using eazy.sms.Common;
+using eazy.sms.Core.Helper;
+using eazy.sms.Model;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,7 @@ namespace eazy.sms.Core.Providers
             this.ApiSecret = ApiSecret;
         }
 
-        public Task SendAsync(string message, string title, Recipient[] recipient, string sender, string scheduleDate, bool isSchedule = false, Attachment attachments = null)
+        public async Task SendAsync(string message, string title, Recipient[] recipient, string sender, string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
             Dictionary<string, dynamic> data = new Dictionary<string, dynamic>()
             {
@@ -32,9 +34,7 @@ namespace eazy.sms.Core.Providers
                 { "IsSchedule", isSchedule }
             };
 
-            var jsonString = JsonConvert.SerializeObject(data);
-
-            return Task.CompletedTask;
+            await ApiCallHelper<object>.PostRequest($"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={this.ApiKey}", data);
         }
     }
 }
