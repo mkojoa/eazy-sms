@@ -1,4 +1,5 @@
 ﻿using eazy.sms.Common;
+using eazy.sms.Core.Exceptions;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
 using Newtonsoft.Json;
@@ -157,6 +158,19 @@ namespace eazy.sms.Core
         internal async Task SendAsync(TemplateRenderer renderer, IMessage message)
         {
             Build();
+
+            //logic here
+        }
+
+        private async Task<string> BuildMessage(TemplateRenderer renderer)
+        {
+            if (_Body != null) return _Body.Content;
+
+            if (_TemplatePath != null)
+                return await TemplateRenderer.RenderTemplateToStringAsync(_TemplatePath, _TemplateModel)
+                    .ConfigureAwait(false);
+
+            throw new NoSmsRendererFound(NoRenderFoundMessage);
         }
     }
 }
