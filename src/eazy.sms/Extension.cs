@@ -2,7 +2,8 @@
 
 namespace eazy.sms
 {
-    public class Class1
+    public class Extension
     {
+        
     }
 }
