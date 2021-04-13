@@ -38,7 +38,7 @@ namespace eazy.sms.Core
             PropertyName = "allowedChannels",
             ItemConverterType = typeof(StringEnumConverter)
         )]
-        private Channel[] AllowedChannels { get; set; }
+        private Channel _Channel { get; set; }
 
         /// <summary>
         ///     Template data to pass to the Txt view to render.
@@ -145,9 +145,9 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Channel(Channel[] channel) 
+        public IMessageBuilder<T> Channel(Channel channel) 
         {
-            AllowedChannels = channel;
+            _Channel = channel;
             return this;
         }
 
@@ -166,16 +166,16 @@ namespace eazy.sms.Core
 
         protected virtual void Build() { }
 
-        internal async Task SendAsync(IMessage imessage)
+        internal async Task SendAsync(IMessage message)
         {
             Build();
 
             //logic here
-            var message = await BuildMsg()
+            var msg = await BuildMsg()
                 .ConfigureAwait(false);
 
-            await imessage.SendAsync(
-                message,
+            await message.SendAsync(
+                msg,
                 _Subject,
                 _Recipients,
                 _From,
