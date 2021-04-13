@@ -13,11 +13,11 @@ namespace eazy.sms.Core
         Task SendAsync(
             string message,
             string title,
-            string[] recipient,
+            Recipient[] recipient,
             string sender,
             string scheduleDate,
             bool isSchedule = false,
-            IEnumerable<Attachment> attachments = null
+            Attachment attachments = null
         );
     }
 }

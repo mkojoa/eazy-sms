@@ -143,6 +143,17 @@ namespace eazy.sms.Core
         /// <summary>
         /// 
         /// </summary>
+        /// <param name="channel"></param>
+        /// <returns></returns>
+        public IMessageBuilder<T> Channel(Channel[] channel) 
+        {
+            AllowedChannels = channel;
+            return this;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
         /// <param name="templatePath"></param>
         /// <param name="templateModel"></param>
         /// <returns></returns>
@@ -155,14 +166,38 @@ namespace eazy.sms.Core
 
         protected virtual void Build() { }
 
-        internal async Task SendAsync(TemplateRenderer renderer, IMessage message)
+        internal async Task SendAsync(TemplateRenderer renderer, IMessage imessage)
         {
             Build();
 
             //logic here
+            var message = await BuildMsg()
+                .ConfigureAwait(false);
+
+            await imessage.SendAsync(
+                message,
+                _Subject,
+                _Recipients,
+                _From,
+                _ScheduleDate,
+                _IsSchedule,
+                _Attachment
+            ).ConfigureAwait(true);
         }
 
-        private async Task<string> BuildMessage(TemplateRenderer renderer)
+
+        internal async Task<string> RenderAsync(TemplateRenderer renderer, IMessage message)
+        {
+            Build();
+            return await BuildMsg().ConfigureAwait(false);
+        }
+
+        /// <summary>
+        /// Prepare tMessahed
+        /// </summary>
+        /// <param name="renderer"></param>
+        /// <returns></returns>
+        private async Task<string> BuildMsg()
         {
             if (_Body != null) return _Body.Content;
 
