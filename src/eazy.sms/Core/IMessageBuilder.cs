@@ -166,7 +166,7 @@ namespace eazy.sms.Core
 
         protected virtual void Build() { }
 
-        internal async Task SendAsync(TemplateRenderer renderer, IMessage imessage)
+        internal async Task SendAsync(IMessage imessage)
         {
             Build();
 
@@ -186,11 +186,11 @@ namespace eazy.sms.Core
         }
 
 
-        internal async Task<string> RenderAsync(TemplateRenderer renderer, IMessage message)
-        {
-            Build();
-            return await BuildMsg().ConfigureAwait(false);
-        }
+        //internal async Task<string> RenderAsync()
+        //{
+        //    Build();
+        //    return await BuildMsg().ConfigureAwait(false);
+        //}
 
         /// <summary>
         /// Prepare tMessahed
