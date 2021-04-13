@@ -2,8 +2,10 @@
 
 namespace eazy.sms
 {
-    public class Extension
+    public static class Extension
     {
-        
+        //public static IServiceCollection AddEazySMS(this IServiceCollection services, IConfiguration configuration)
+        //{
+        //}
     }
 }

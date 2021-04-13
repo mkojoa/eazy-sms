@@ -157,7 +157,7 @@ namespace eazy.sms.Core
         /// <param name="templatePath"></param>
         /// <param name="templateModel"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Template(string templatePath, T templateModel)
+        public IMessageBuilder<T> Template(string templatePath, T templateModel = default)
         {
             _TemplateModel = templateModel;
             _TemplatePath = templatePath;

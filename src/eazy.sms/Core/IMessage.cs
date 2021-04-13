@@ -8,8 +8,6 @@ namespace eazy.sms.Core
 {
     public interface IMessage
     {
-        Task SendAsync<T>(IMessageBuilder<T> sMsBuilder);
-
         Task SendAsync(
             string message,
             string title,
