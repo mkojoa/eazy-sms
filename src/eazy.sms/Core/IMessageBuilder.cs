@@ -185,13 +185,6 @@ namespace eazy.sms.Core
             ).ConfigureAwait(true);
         }
 
-
-        //internal async Task<string> RenderAsync()
-        //{
-        //    Build();
-        //    return await BuildMsg().ConfigureAwait(false);
-        //}
-
         /// <summary>
         /// Prepare tMessahed
         /// </summary>
