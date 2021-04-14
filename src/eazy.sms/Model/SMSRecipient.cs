@@ -15,7 +15,6 @@ namespace eazy.sms.Model
         ///     This value should be in international format.
         ///     A single mobile number per request. Example: '[+233]276002658'
         /// </summary>
-        [JsonProperty("number")]
         public string Number { get; set; }
     }
 }

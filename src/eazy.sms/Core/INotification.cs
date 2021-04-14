@@ -12,7 +12,7 @@ namespace eazy.sms.Core
         Task NotifyAsync(
             string message,
             string title,
-            Recipient[] recipient,
+            SMSRecipient[] recipient,
             string sender,
             string scheduleDate,
             bool isSchedule = false,
