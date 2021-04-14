@@ -8,7 +8,8 @@ namespace eazy.sms.Core
 {
     public interface IMessage
     {
-        Task SendAsync(
+        Task NotifyAsync<T>(Notifiable<T> notifiable);
+        Task NotifyAsync(
             string message,
             string title,
             Recipient[] recipient,

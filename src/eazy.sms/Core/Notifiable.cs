@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace eazy.sms.Core
-{
-    public class IMessageBuilder<T>
+{ 
+    public class Notifiable<T>
     {
         /// <summary>
         /// No Render Found Message
@@ -83,7 +83,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="from"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> From(string from)
+        public Notifiable<T> From(string from)
         {
             _From = from;
             return this;
@@ -94,7 +94,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="recipients"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Recipient(Recipient[] recipients)
+        public Notifiable<T> Recipient(Recipient[] recipients)
         {
             _Recipients = recipients;
             return this;
@@ -105,7 +105,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="subject"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Subject(string subject)
+        public Notifiable<T> Subject(string subject)
         {
             _Subject = subject;
             return this;
@@ -116,13 +116,13 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="attachment"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Attach(Attachment attachment)
+        public Notifiable<T> Attach(Attachment attachment)
         {
             _Attachment = attachment;
             return this;
         }
 
-        public IMessageBuilder<T> Schedule(bool isSchedule = false, string scheduleDate = null)
+        public Notifiable<T> Schedule(bool isSchedule = false, string scheduleDate = null)
         {
             _IsSchedule = isSchedule;
             _ScheduleDate = scheduleDate;
@@ -134,7 +134,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="body"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Body(Body body)
+        public Notifiable<T> Body(Body body)
         {
             _Body = body;
             return this;
@@ -145,7 +145,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Channel(Channel channel) 
+        public Notifiable<T> Channel(Channel channel) 
         {
             _Channel = channel;
             return this;
@@ -157,24 +157,24 @@ namespace eazy.sms.Core
         /// <param name="templatePath"></param>
         /// <param name="templateModel"></param>
         /// <returns></returns>
-        public IMessageBuilder<T> Template(string templatePath, T templateModel = default)
+        public Notifiable<T> Template(string templatePath, T templateModel = default)
         {
             _TemplateModel = templateModel;
             _TemplatePath = templatePath;
             return this;
         }
 
-        protected virtual void Build() { }
+        protected virtual void Boot() { }
 
         internal async Task SendAsync(IMessage message)
         {
-            Build();
+            Boot();
 
             //logic here
             var msg = await BuildMsg()
                 .ConfigureAwait(false);
 
-            await message.SendAsync(
+            await message.NotifyAsync(
                 msg,
                 _Subject,
                 _Recipients,
@@ -186,9 +186,8 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// Prepare tMessahed
+        /// Prepare message
         /// </summary>
-        /// <param name="renderer"></param>
         /// <returns></returns>
         private async Task<string> BuildMsg()
         {

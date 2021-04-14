@@ -11,30 +11,36 @@ namespace eazy.sms.Core.Providers
 {
     public class Mnotify : IMessage
     {
-
-        public string ApiKey { get; set; } 
-        public string ApiSecret { get; set; }
+        private string ApiKey { get; set; }
+        private string ApiSecret { get; set; }
 
          
-        public Mnotify(string ApiKey, string ApiSecret)
+        public Mnotify(string apiKey, string apiSecret)
         {
-            this.ApiKey = ApiKey;
-            this.ApiSecret = ApiSecret;
+            this.ApiKey = apiKey;
+            this.ApiSecret = apiSecret;
         }
 
-        public async Task SendAsync(string message, string title, Recipient[] recipient, string sender, string scheduleDate, bool isSchedule = false, Attachment attachments = null)
+        public async Task NotifyAsync<T>(Notifiable<T> notifiable)
         {
-            Dictionary<string, dynamic> data = new Dictionary<string, dynamic>()
+             await notifiable.SendAsync(this);
+        }
+
+        public async Task NotifyAsync(string message, string title, Recipient[] recipient, string sender,
+            string scheduleDate, bool isSchedule = false, Attachment attachments = null)
+        {
+            var data = new Dictionary<string, dynamic>()
             {
-                { "message", message}, 
-                { "title", title },
-                { "recipient", recipient },
-                { "sender", sender},
-                { "scheduleDate", scheduleDate},
-                { "IsSchedule", isSchedule }
+                {"message", message},
+                {"title", title},
+                {"recipient", recipient},
+                {"sender", sender},
+                {"scheduleDate", scheduleDate},
+                {"IsSchedule", isSchedule}
             };
 
-            await ApiCallHelper<object>.PostRequest($"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={this.ApiKey}", data);
+            await ApiCallHelper<object>.PostRequest(
+                $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={this.ApiKey}", data);
         }
     }
 }
