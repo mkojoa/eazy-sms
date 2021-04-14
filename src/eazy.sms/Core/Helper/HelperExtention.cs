@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eazy.sms.Core.Helper
@@ -29,8 +27,8 @@ namespace eazy.sms.Core.Helper
         public static void LogWrite(string logMessage)
         {
             var appDir = Directory.GetCurrentDirectory() + "\\Logs";
-            HelperExtention.CreateDirectoryIfDoesNotExist(appDir);
-            HelperExtention.CreateFileIfDoesNotExist(appDir + "\\log.txt");
+            CreateDirectoryIfDoesNotExist(appDir);
+            CreateFileIfDoesNotExist(appDir + "\\log.txt");
             try
             {
                 using var w = File.AppendText(appDir + "\\log.txt");

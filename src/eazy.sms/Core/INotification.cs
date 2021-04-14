@@ -1,18 +1,16 @@
-﻿using eazy.sms.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using eazy.sms.Model;
 
 namespace eazy.sms.Core
 {
-    public interface IMessage
+    public interface INotification
     {
         Task NotifyAsync<T>(Notifiable<T> notifiable);
+
         Task NotifyAsync(
             string message,
             string title,
-            SMSRecipient[] recipient,
+            string[] recipient,
             string sender,
             string scheduleDate,
             bool isSchedule = false,

@@ -1,39 +1,30 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using easy.sms.test.Notifications;
+using eazy.sms.Core;
+using Microsoft.AspNetCore.Mvc;
 
 namespace easy.sms.test.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class RegistrationController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly INotification _notification;
 
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public RegistrationController(INotification notification)
         {
-            _logger = logger;
+            _notification = notification;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("Register")]
+        public async Task<IActionResult> Register()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            //Create new user
+
+            //call this after creating user to send email
+            await _notification.NotifyAsync(new AccountCreation("New User Created. Registration Code is [234223]"));
+
+            return Ok("Message sent to registered users");
         }
     }
 }

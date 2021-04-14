@@ -1,19 +1,21 @@
-﻿using System;
-using eazy.sms.Core;
+﻿using eazy.sms.Core;
 using eazy.sms.Core.Providers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 namespace eazy.sms
 {
     public static class Extension
     {
         public static IServiceCollection AddEazySMS(this IServiceCollection services, IConfiguration configuration)
         {
-            IMessage messageBuilder = new Mnotify(
+            INotification notification = new Mnotify(
                 configuration.GetValue<string>("EazyConfig:SMS:ApiKey", null),
                 configuration.GetValue<string>("EazyConfig:SMS:ApiSecret", null)
             );
+
+            services.AddSingleton(notification);
 
             return services;
         }
@@ -23,4 +25,4 @@ namespace eazy.sms
             return app;
         }
     }
-} 
+}

@@ -1,18 +1,17 @@
-﻿using eazy.sms.Common;
+﻿using System.Threading.Tasks;
+using eazy.sms.Common;
 using eazy.sms.Core.Exceptions;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace eazy.sms.Core
-{ 
+{
     public class Notifiable<T>
     {
         /// <summary>
-        /// No Render Found Message
+        ///     No Render Found Message
         /// </summary>
         private const string NoRenderFoundMessage
             = "Please use one of the available methods for specifying how to render your sms (e.g. Text() or Template())";
@@ -28,7 +27,7 @@ namespace eazy.sms.Core
         ///     Required: The destination mobile numbers.
         /// </summary>
         [JsonProperty("to")]
-        private Recipient[] _Recipients { get; set; }
+        private string[] _SmsRecipients { get; set; }
 
         /// <summary>
         ///     The allowed channels field forces a message to only use certain routes.
@@ -38,7 +37,7 @@ namespace eazy.sms.Core
             PropertyName = "allowedChannels",
             ItemConverterType = typeof(StringEnumConverter)
         )]
-        private Channel _Channel { get; set; }
+        private SMSChannel _SmsChannel { get; set; }
 
         /// <summary>
         ///     Template data to pass to the Txt view to render.
@@ -57,51 +56,46 @@ namespace eazy.sms.Core
         private Body _Body { get; set; }
 
         /// <summary>
-        /// Optional : FileName.ext && Path to file
+        ///     Optional : FileName.ext && Path to file
         /// </summary>
         [JsonProperty("attachment")]
         private Attachment _Attachment { get; set; }
 
         /// <summary>
-        /// Optional : The title of the message
+        ///     Optional : The title of the message
         /// </summary>
         /// [JsonProperty("subject")]
         private string _Subject { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
-        public bool _IsSchedule { get; set; }
+        private bool _IsSchedule { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
-        public string _ScheduleDate { get; set; }
+        private string _ScheduleDate { get; set; }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="from"></param>
         /// <returns></returns>
-        public Notifiable<T> From(string from)
+        protected Notifiable<T> From(string from)
         {
             _From = from;
             return this;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="recipients"></param>
         /// <returns></returns>
-        public Notifiable<T> Recipient(Recipient[] recipients)
+        public Notifiable<T> Recipient(string[] recipients)
         {
-            _Recipients = recipients;
+            _SmsRecipients = recipients;
             return this;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="subject"></param>
         /// <returns></returns>
@@ -112,7 +106,6 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="attachment"></param>
         /// <returns></returns>
@@ -130,7 +123,6 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="body"></param>
         /// <returns></returns>
@@ -141,18 +133,16 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public Notifiable<T> Channel(Channel channel) 
+        public Notifiable<T> Channel(SMSChannel channel)
         {
-            _Channel = channel;
+            _SmsChannel = channel;
             return this;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="templatePath"></param>
         /// <param name="templateModel"></param>
@@ -164,9 +154,11 @@ namespace eazy.sms.Core
             return this;
         }
 
-        protected virtual void Boot() { }
+        protected virtual void Boot()
+        {
+        }
 
-        internal async Task SendAsync(IMessage message)
+        internal async Task SendAsync(INotification notification)
         {
             Boot();
 
@@ -174,10 +166,10 @@ namespace eazy.sms.Core
             var msg = await BuildMsg()
                 .ConfigureAwait(false);
 
-            await message.NotifyAsync(
+            await notification.NotifyAsync(
                 msg,
                 _Subject,
-                _Recipients,
+                _SmsRecipients,
                 _From,
                 _ScheduleDate,
                 _IsSchedule,
@@ -186,7 +178,7 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// Prepare message
+        ///     Prepare message
         /// </summary>
         /// <returns></returns>
         private async Task<string> BuildMsg()

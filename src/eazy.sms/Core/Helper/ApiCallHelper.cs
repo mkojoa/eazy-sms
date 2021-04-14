@@ -1,10 +1,8 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Net.Http;
 using System.Net.Http.Formatting;
-using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace eazy.sms.Core.Helper
 {
@@ -44,7 +42,7 @@ namespace eazy.sms.Core.Helper
         {
             T result = null;
 
-            using var client = new HttpClient { BaseAddress = new Uri(apiUrl) };
+            using var client = new HttpClient {BaseAddress = new Uri(apiUrl)};
             var response = await client.PostAsync(apiUrl, postObject, new JsonMediaTypeFormatter())
                 .ConfigureAwait(false);
 

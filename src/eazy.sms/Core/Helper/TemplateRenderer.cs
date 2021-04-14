@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace eazy.sms.Core.Helper
@@ -17,7 +15,7 @@ namespace eazy.sms.Core.Helper
             var properties = model.GetType().GetProperties();
 
             var content = await HelperExtention.LoadTextFile(appDirectory);
-             
+
             content = properties.Aggregate(content,
                 (current,
                     property) => current.Replace("[" + property.Name.ToLower() + "]",
