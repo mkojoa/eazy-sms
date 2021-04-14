@@ -11,8 +11,8 @@ namespace eazy.sms
         public static IServiceCollection AddEazySMS(this IServiceCollection services, IConfiguration configuration)
         {
             IMessage messageBuilder = new Mnotify(
-                configuration.GetValue<string>("MelteckXtra:SMS:ApiKey", null),
-                configuration.GetValue<string>("MelteckXtra:SMS:ApiSecret", null)
+                configuration.GetValue<string>("EazyConfig:SMS:ApiKey", null),
+                configuration.GetValue<string>("EazyConfig:SMS:ApiSecret", null)
             );
 
             return services;
