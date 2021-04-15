@@ -7,7 +7,7 @@ namespace easy.sms.test.Notifications
     public class AccountCreatedNotifiable : Notifiable<string>
     {
         public AccountCreatedNotifiable(string message)
-        { 
+        {
             Message = message;
         }
 
@@ -15,7 +15,6 @@ namespace easy.sms.test.Notifications
 
         protected override void Boot()
         {
-
             From("Melteck")
                 .Subject("Account Created")
                 .Recipient(new[]
@@ -26,7 +25,7 @@ namespace easy.sms.test.Notifications
                 )
                 .Body(new Body {Content = $"{Message}"})
                 .Schedule(false, "")
-                .Attach(new Attachment { Path = "", File = "audio.mp3" })
+                .Attach(new Attachment {Path = "", File = "audio.mp3"})
                 .Channel(SMSChannel.Mnotify);
         }
     }

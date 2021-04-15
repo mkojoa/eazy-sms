@@ -3,6 +3,6 @@
     public class Attachment
     {
         public string Path { get; set; }
-        public string File { get; set; } 
+        public string File { get; set; }
     }
 }

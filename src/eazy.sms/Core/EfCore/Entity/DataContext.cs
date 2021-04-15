@@ -1,18 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace eazy.sms.Core.EfCore.Entity
 {
-    public partial class DataContext : DbContext
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
-            if (!Database.CanConnect())
-            {
-                Database.EnsureCreated();
-            }
+            if (!Database.CanConnect()) Database.EnsureCreated();
         }
 
         public virtual DbSet<EventMessage> EventMessages { get; set; }
@@ -26,12 +21,14 @@ namespace eazy.sms.Core.EfCore.Entity
                 entity.Property(e => e.Status).HasDefaultValueSql("(0)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
                 entity.Property(x => x.UpdatedAt).HasDefaultValueSql("(getdate())").ValueGeneratedOnAddOrUpdate();
-
             });
 
             OnModelCreatingPartial(modelBuilder);
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        private void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

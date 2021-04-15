@@ -1,8 +1,6 @@
-﻿using eazy.sms.Core.EfCore.Entity;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using eazy.sms.Core.EfCore.Entity;
 
 namespace eazy.sms.Core.EfCore
 {

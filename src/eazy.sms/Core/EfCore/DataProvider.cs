@@ -1,9 +1,7 @@
-﻿using eazy.sms.Core.EfCore.Entity;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using eazy.sms.Core.EfCore.Entity;
 
 namespace eazy.sms.Core.EfCore
 {
@@ -15,25 +13,28 @@ namespace eazy.sms.Core.EfCore
         {
             _context = dataContext;
 
-            if (!_context.Database.CanConnect())
-            {
-                _context.Database.EnsureCreated();
-            }
+            if (!_context.Database.CanConnect()) _context.Database.EnsureCreated();
         }
 
         public void Commit()
         {
-            var testVar = (_context.SaveChanges() >= 0);
+            var testVar = _context.SaveChanges() >= 0;
             //return (_context.SaveChanges() >= 0);
         }
 
         public async Task CreateDataAsync(EventMessage eventMessage)
-            => await _context.EventMessages.AddAsync(eventMessage);
+        {
+            await _context.EventMessages.AddAsync(eventMessage);
+        }
 
         public async Task<IEnumerable<EventMessage>> FetchDataAsync(int level)
-            => _context.EventMessages.Where(rt => rt.Status == level).AsEnumerable();
+        {
+            return _context.EventMessages.Where(rt => rt.Status == level).AsEnumerable();
+        }
 
         public async Task UpdateDataAsync(EventMessage eventMessage)
-            => _context.EventMessages.Update(eventMessage);
+        {
+            _context.EventMessages.Update(eventMessage);
+        }
     }
 }

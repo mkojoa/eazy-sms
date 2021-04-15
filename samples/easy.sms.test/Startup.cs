@@ -20,7 +20,7 @@ namespace easy.sms.test
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddEazySMS(Configuration);
+            services.AddEazySms(Configuration);
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
@@ -38,7 +38,7 @@ namespace easy.sms.test
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "easy.sms.test v1"));
             }
 
-            app.UseEazySMS(Configuration);
+            app.UseEazySms(Configuration);
 
             app.UseRouting();
 

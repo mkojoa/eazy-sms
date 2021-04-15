@@ -6,13 +6,13 @@ using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace eazy.sms.Core.Providers
 {
     public class Mnotify : INotification
     {
+        private readonly IServiceCollection _services;
 
         public Mnotify(string apiKey, string apiSecret, IServiceCollection services)
         {
@@ -23,7 +23,6 @@ namespace eazy.sms.Core.Providers
 
         private string ApiKey { get; }
         private string ApiSecret { get; }
-        private readonly IServiceCollection _services; 
 
         public async Task NotifyAsync<T>(Notifiable<T> notifiable)
         {
@@ -33,26 +32,27 @@ namespace eazy.sms.Core.Providers
         public async Task NotifyAsync(string message, string title, string[] recipient, string sender,
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
+            string to = "\"" + string.Join("\", \"", recipient) + "\"";
+             
+           // var to = string.Join(",", recipient.Select(item => "\"" + item + "\""));//.ToString().Replace(@"\", "");
 
-            var to = string.Join(",", recipient.Select(item => "\"" + item + "\"")).ToString().Replace("\\","");
-
-            var data = $"{"{"}" +
+            var data = "{" +
                        $"'message':'{message}', " +
                        $"'title':'{title}'," +
                        $"'recipient':'[{to}]'," +
                        $"'sender':'{sender}'," +
                        $"'scheduleDate':'{scheduleDate}'," +
                        $"'IsSchedule':'{isSchedule}'" +
-                       $"{"}"}";
+                       "}";
 
             var scopeFactory = _services
-                    .BuildServiceProvider()
-                    .GetRequiredService<IServiceScopeFactory>();
+                .BuildServiceProvider()
+                .GetRequiredService<IServiceScopeFactory>();
 
             using (var scope = scopeFactory.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+                var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
                 await provider.CreateDataAsync(new EventMessage
                 {
                     Message = data,
@@ -63,15 +63,14 @@ namespace eazy.sms.Core.Providers
             }
 
 
-
-            var gateway =  await ApiCallHelper<object>.PostRequest(
+            var gateway = await ApiCallHelper<object>.PostRequest(
                 $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data);
 
 
             using (var scope = scopeFactory.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
-                var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+                var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
                 await provider.UpdateDataAsync(new EventMessage
                 {
                     Status = 1

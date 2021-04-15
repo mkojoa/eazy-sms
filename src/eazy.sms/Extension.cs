@@ -6,20 +6,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
 
 namespace eazy.sms
 {
     public static class Extension
     {
         //static IServiceProvider serviceProvider;
-        public static IServiceCollection AddEazySMS(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddEazySms(this IServiceCollection services, IConfiguration configuration)
         {
             EfCoreIoC(services, configuration);
 
             INotification notification = new Mnotify(
-                configuration.GetValue<string>("EazyConfig:SMS:ApiKey", "test"),
-                configuration.GetValue<string>("EazyConfig:SMS:ApiSecret", "test"),
+                configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
+                configuration.GetValue("EazyConfig:SMS:ApiSecret", "test"),
                 services
             );
 
@@ -29,8 +28,8 @@ namespace eazy.sms
             return services;
         }
 
-        
-        public static IApplicationBuilder UseEazySMS(this IApplicationBuilder app, IConfiguration configuration)
+
+        public static IApplicationBuilder UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
         {
             configuration.GetSection("");
 
@@ -52,11 +51,9 @@ namespace eazy.sms
                 options =>
                     options.UseSqlServer(
                         fullConec
-                    )); //https://we.tl/t-1xqgEKhXhC
+                    ));
 
             services.AddScoped<IDataProvider, DataProvider>();
         }
-
-
     }
 }
