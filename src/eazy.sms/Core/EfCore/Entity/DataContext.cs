@@ -5,11 +5,14 @@ using System.Text;
 
 namespace eazy.sms.Core.EfCore.Entity
 {
-    public class DataContext : DbContext
+    public partial class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
-            if (!Database.CanConnect()) Database.EnsureCreated(); 
+            if (!Database.CanConnect())
+            {
+                Database.EnsureCreated();
+            }
         }
 
         public virtual DbSet<EventMessage> EventMessages { get; set; }
@@ -20,11 +23,15 @@ namespace eazy.sms.Core.EfCore.Entity
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
                 entity.Property(e => e.Message).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.Status).HasDefaultValueSql("(false)");
-                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(NULL)");
+                entity.Property(e => e.Status).HasDefaultValueSql("(0)");
+                entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
+                entity.Property(x => x.UpdatedAt).HasDefaultValueSql("(getdate())").ValueGeneratedOnAddOrUpdate();
+
             });
 
+            OnModelCreatingPartial(modelBuilder);
         }
+
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

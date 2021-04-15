@@ -8,6 +8,6 @@ namespace eazy.sms.Core.EfCore.Entity
     {
         public string Message { get; set; }
         public string Exceptions { get; set; } 
-        public bool Status { get; set; } 
+        public int Status { get; set; } 
     }
 }

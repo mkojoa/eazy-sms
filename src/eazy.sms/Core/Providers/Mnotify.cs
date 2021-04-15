@@ -34,7 +34,7 @@ namespace eazy.sms.Core.Providers
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
 
-            var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
+            var to = string.Join(",", recipient.Select(item => "\"" + item + "\"")).ToString().Replace("\\","");
 
             var data = $"{"{"}" +
                        $"'message':'{message}', " +
@@ -57,8 +57,9 @@ namespace eazy.sms.Core.Providers
                 {
                     Message = data,
                     Exceptions = "",
-                    Status = false
+                    Status = 0
                 });
+                provider.Commit();
             }
 
 
@@ -73,8 +74,9 @@ namespace eazy.sms.Core.Providers
                 var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
                 await provider.UpdateDataAsync(new EventMessage
                 {
-                    Status = false
+                    Status = 1
                 });
+                provider.Commit();
             }
         }
     }
