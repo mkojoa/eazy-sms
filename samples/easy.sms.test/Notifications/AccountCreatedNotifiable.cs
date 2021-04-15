@@ -4,10 +4,10 @@ using eazy.sms.Model;
 
 namespace easy.sms.test.Notifications
 {
-    public class AccountCreation : Notifiable<string>
+    public class AccountCreatedNotifiable : Notifiable<string>
     {
-        public AccountCreation(string message)
-        {
+        public AccountCreatedNotifiable(string message)
+        { 
             Message = message;
         }
 
@@ -15,7 +15,6 @@ namespace easy.sms.test.Notifications
 
         protected override void Boot()
         {
-            var dataPassed = Message;
 
             From("Melteck")
                 .Subject("Account Created")
@@ -25,8 +24,9 @@ namespace easy.sms.test.Notifications
                         "0553771219"
                     }
                 )
-                .Body(new Body {Content = "New User Created. Registration Code is [234223]"})
+                .Body(new Body {Content = $"{Message}"})
                 .Schedule(false, "")
+                .Attach(new Attachment { Path = "", File = "audio.mp3" })
                 .Channel(SMSChannel.Mnotify);
         }
     }

@@ -22,7 +22,7 @@ namespace easy.sms.test.Controllers
             //Create new user
 
             //call this after creating user to send email
-            await _notification.NotifyAsync(new AccountCreation("New User Created. Registration Code is [234223]"));
+            await _notification.NotifyAsync(new AccountCreatedNotifiable("Hi!, This is a message from big bro"));
 
             return Ok("Message sent to registered users");
         }
