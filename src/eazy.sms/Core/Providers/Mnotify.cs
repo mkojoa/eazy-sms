@@ -1,25 +1,29 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace eazy.sms.Core.Providers
 {
     public class Mnotify : INotification
     {
-        public Mnotify(string apiKey, string apiSecret, IDataProvider dataProvider = null)
+
+        public Mnotify(string apiKey, string apiSecret, IServiceCollection services)
         {
             ApiKey = apiKey;
             ApiSecret = apiSecret;
-            DataProvider = dataProvider;
+            _services = services;
         }
 
         private string ApiKey { get; }
         private string ApiSecret { get; }
-        private IDataProvider DataProvider { get; }
+        private readonly IServiceCollection _services; 
 
         public async Task NotifyAsync<T>(Notifiable<T> notifiable)
         {
@@ -41,22 +45,37 @@ namespace eazy.sms.Core.Providers
                        $"'IsSchedule':'{isSchedule}'" +
                        $"{"}"}";
 
-            // push to database for resend ability
-            await DataProvider.CreateDataAsync(new EventMessage
+            var scopeFactory = _services
+                    .BuildServiceProvider()
+                    .GetRequiredService<IServiceScopeFactory>();
+
+            using (var scope = scopeFactory.CreateScope())
             {
-                Message = data,
-                Exceptions = "",
-                Status = false
-            });
+                var serviceProvider = scope.ServiceProvider;
+                var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+                await provider.CreateDataAsync(new EventMessage
+                {
+                    Message = data,
+                    Exceptions = "",
+                    Status = false
+                });
+            }
+
+
 
             var gateway =  await ApiCallHelper<object>.PostRequest(
                 $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data);
 
-            // update with message sent status;
-            await DataProvider.UpdateDataAsync(new EventMessage
+
+            using (var scope = scopeFactory.CreateScope())
             {
-                Status = true
-            });
+                var serviceProvider = scope.ServiceProvider;
+                var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+                await provider.UpdateDataAsync(new EventMessage
+                {
+                    Status = false
+                });
+            }
         }
     }
 }
