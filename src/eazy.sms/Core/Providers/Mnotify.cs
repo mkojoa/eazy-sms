@@ -7,6 +7,7 @@ using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 
 namespace eazy.sms.Core.Providers
 {
@@ -33,8 +34,8 @@ namespace eazy.sms.Core.Providers
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
             string to = "\"" + string.Join("\", \"", recipient) + "\"";
-             
-           // var to = string.Join(",", recipient.Select(item => "\"" + item + "\""));//.ToString().Replace(@"\", "");
+
+            // var to = string.Join(",", recipient.Select(item => "\"" + item + "\""));//.ToString().Replace(@"\", "");
 
             var data = "{" +
                        $"'message':'{message}', " +
@@ -44,6 +45,8 @@ namespace eazy.sms.Core.Providers
                        $"'scheduleDate':'{scheduleDate}'," +
                        $"'IsSchedule':'{isSchedule}'" +
                        "}";
+
+            var toJson = ApiCallHelper<object>.ToDynamicJson(data);
 
             var scopeFactory = _services
                 .BuildServiceProvider()
