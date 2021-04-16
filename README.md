@@ -12,4 +12,4 @@ using mnotify, hubtel sms gateway , etc.. in your .netcore applications.
 - [ ] SMS
 - [ ] Mail
 
- eazy-sms Library repository is work in progress and hope to support mobile money, ussd etc.
+ eazy-sms Library repository is work in progress and hope to support mobile money, ussd, etc.
