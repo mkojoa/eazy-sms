@@ -26,9 +26,6 @@ namespace eazy.sms.Core.EfCore.Entity
             OnModelCreatingPartial(modelBuilder);
         }
 
-        private void OnModelCreatingPartial(ModelBuilder modelBuilder)
-        {
-            throw new NotImplementedException();
-        }
+        private void OnModelCreatingPartial(ModelBuilder modelBuilder) { }
     }
 }

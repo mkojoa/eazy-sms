@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Core.EfCore.Entity;
@@ -22,9 +23,10 @@ namespace eazy.sms.Core.EfCore
             //return (_context.SaveChanges() >= 0);
         }
 
-        public async Task CreateDataAsync(EventMessage eventMessage)
+        public async Task<EventMessage> CreateDataAsync(EventMessage eventMessage)
         {
             await _context.EventMessages.AddAsync(eventMessage);
+            return eventMessage;
         }
 
         public async Task<IEnumerable<EventMessage>> FetchDataAsync(int level)

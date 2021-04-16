@@ -8,6 +8,14 @@ namespace eazy.sms.Core.Helper
 {
     public static class ApiCallHelper<T> where T : class
     {
+
+
+        public static string ToDynamicJson(T data)
+        {
+            return JsonConvert.SerializeObject(data);// JsonConvert.DeserializeObject<T>(data.ToString());
+        }
+
+
         /// <summary>
         ///     For getting the resources from a web api
         /// </summary>
@@ -38,7 +46,7 @@ namespace eazy.sms.Core.Helper
         /// <param name="apiUrl">API Url</param>
         /// <param name="postObject">The object to be created</param>
         /// <returns>A Task with created item</returns>
-        public static async Task<T> PostRequest(string apiUrl, T postObject)
+        public static async Task<T> PostRequest(string apiUrl, object postObject)
         {
             T result = null;
 
