@@ -8,13 +8,6 @@ namespace eazy.sms.Core.Helper
 {
     public static class ApiCallHelper<T> where T : class
     {
-        //string strRemSlash = data.Replace("\"", "\'");
-        //string strRemNline = strRemSlash.Replace("\n", " ");
-        public static object ToDynamicJson(T data)
-        {
-            return JsonConvert.SerializeObject(data);// JsonConvert.DeserializeObject<T>(data.ToString());
-        }
-
         /// <summary>
         ///     For getting the resources from a web api
         /// </summary>

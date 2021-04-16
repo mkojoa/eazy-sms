@@ -33,20 +33,22 @@ namespace eazy.sms.Core.Providers
         public async Task NotifyAsync(string message, string title, string[] recipient, string sender,
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
-            string to = "\"" + string.Join("\", \"", recipient) + "\"";
+            //string to = "\"" + string.Join("\", \"", recipient) + "\"";
 
-            // var to = string.Join(",", recipient.Select(item => "\"" + item + "\""));//.ToString().Replace(@"\", "");
+            var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
+
 
             var data = "{" +
-                       $"'message':'{message}', " +
-                       $"'title':'{title}'," +
-                       $"'recipient':'[{to}]'," +
-                       $"'sender':'{sender}'," +
-                       $"'scheduleDate':'{scheduleDate}'," +
-                       $"'IsSchedule':'{isSchedule}'" +
+                           $"\"message\":\"{message}\", " +
+                           $"\"title\":\"{title}\"," +
+                           $"\"recipient\":\"[{to}]\"," +
+                           $"\"sender\":\"{sender}\"," +
+                           $"\"scheduleDate\":\"{scheduleDate}\"," +
+                           $"\"IsSchedule\":\"{isSchedule}\"" +
                        "}";
+            var prepareData = HelperExtention.TakeOffSlash(data);
 
-            var toJson = ApiCallHelper<object>.ToDynamicJson(data);
+            var toJson = HelperExtention.ToDynamicJson(data);
 
             var scopeFactory = _services
                 .BuildServiceProvider()

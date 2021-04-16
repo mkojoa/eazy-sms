@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -56,5 +57,22 @@ namespace eazy.sms.Core.Helper
                 // ignored
             }
         }
+
+        public static object ToDynamicJson(string data)
+        {
+            return JsonConvert.SerializeObject(data);// JsonConvert.DeserializeObject<T>(data.ToString());
+        }
+
+        public static string TakeOffSlash(string data)
+        {
+            //data = data.Replace("\"", "\'");
+            //data = data.Replace("\n", " ");
+
+            data = data.Replace("'[", "\"[");
+            data = data.Replace("']", "\"]");
+            return data;
+        }
+
+
     }
 }
