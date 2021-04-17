@@ -18,7 +18,6 @@ namespace eazy.sms
 
             INotification notification = new Mnotify(
                 configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
-                configuration.GetValue("EazyConfig:SMS:ApiSecret", "test"),
                 services
             );
 

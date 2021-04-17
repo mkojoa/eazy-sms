@@ -1,5 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
+﻿using System;
+using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace eazy.sms.Core.EfCore.Entity
 {
@@ -18,6 +19,8 @@ namespace eazy.sms.Core.EfCore.Entity
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
                 entity.Property(e => e.Message).HasDefaultValueSql("(NULL)");
+                entity.Property(e => e.ExceptionStatus).HasDefaultValueSql("(NULL)");
+                entity.Property(e => e.Exceptions).HasDefaultValueSql("(NULL)");
                 entity.Property(e => e.Status).HasDefaultValueSql("(0)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
                 entity.Property(x => x.UpdatedAt).HasDefaultValueSql("(getdate())").ValueGeneratedOnAddOrUpdate();
@@ -26,6 +29,26 @@ namespace eazy.sms.Core.EfCore.Entity
             OnModelCreatingPartial(modelBuilder);
         }
 
-        private void OnModelCreatingPartial(ModelBuilder modelBuilder) { }
+        private void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        {
+        }
+
+        public override int SaveChanges()
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is BaseEntity && (
+                    e.State == EntityState.Added
+                    || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                ((BaseEntity) entityEntry.Entity).UpdatedAt = DateTime.Now;
+
+                if (entityEntry.State == EntityState.Added) ((BaseEntity) entityEntry.Entity).CreatedAt = DateTime.Now;
+            }
+
+            return base.SaveChanges();
+        }
     }
 }

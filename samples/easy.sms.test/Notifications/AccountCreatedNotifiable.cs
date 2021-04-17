@@ -15,9 +15,8 @@ namespace easy.sms.test.Notifications
 
         protected override void Boot()
         {
-
             //logic...
-            From("Melteck")
+            From("Melteck0")
                 .Subject("Account Created")
                 .Recipient(new[]
                     {

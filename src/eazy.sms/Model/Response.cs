@@ -1,40 +1,51 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace eazy.sms.Model
 {
     public class Response
     {
+        [JsonProperty("code")] public readonly string Code;
+
+        [JsonProperty("message")] public readonly string Message;
+
+        [JsonProperty("status")] public readonly string Status;
+
+        [JsonProperty("summary")] public readonly Summary Summary;
+
         [JsonConstructor]
-        public Response( 
+        public Response(
             [JsonProperty("status")] string status,
             [JsonProperty("code")] string code,
             [JsonProperty("message")] string message,
             [JsonProperty("summary")] Summary summary
         )
         {
-            this.Status = status;
-            this.Code = code;
-            this.Message = message;
-            this.Summary = summary;
+            Status = status;
+            Code = code;
+            Message = message;
+            Summary = summary;
         }
-
-        [JsonProperty("status")]
-        public readonly string Status;
-
-        [JsonProperty("code")]
-        public readonly string Code;
-
-        [JsonProperty("message")]
-        public readonly string Message;
-
-        [JsonProperty("summary")]
-        public readonly Summary Summary;
     }
 
     public class Summary
     {
+        [JsonProperty("contacts")] public readonly int Contacts;
+
+        [JsonProperty("credit_left")] public readonly int CreditLeft;
+
+        [JsonProperty("credit_used")] public readonly int CreditUsed;
+
+        [JsonProperty("_id")] public readonly string Id;
+
+        [JsonProperty("numbers_sent")] public readonly List<string> NumbersSent;
+
+        [JsonProperty("total_rejected")] public readonly int TotalRejected;
+
+        [JsonProperty("total_sent")] public readonly int TotalSent;
+
+        [JsonProperty("type")] public readonly string Type;
+
         [JsonConstructor]
         public Summary(
             [JsonProperty("_id")] string id,
@@ -47,38 +58,14 @@ namespace eazy.sms.Model
             [JsonProperty("credit_left")] int creditLeft
         )
         {
-            this.Id = id;
-            this.Type = type;
-            this.TotalSent = totalSent;
-            this.Contacts = contacts;
-            this.TotalRejected = totalRejected;
-            this.NumbersSent = numbersSent;
-            this.CreditUsed = creditUsed;
-            this.CreditLeft = creditLeft;
+            Id = id;
+            Type = type;
+            TotalSent = totalSent;
+            Contacts = contacts;
+            TotalRejected = totalRejected;
+            NumbersSent = numbersSent;
+            CreditUsed = creditUsed;
+            CreditLeft = creditLeft;
         }
-
-        [JsonProperty("_id")]
-        public readonly string Id;
-
-        [JsonProperty("type")]
-        public readonly string Type;
-
-        [JsonProperty("total_sent")]
-        public readonly int TotalSent;
-
-        [JsonProperty("contacts")]
-        public readonly int Contacts;
-
-        [JsonProperty("total_rejected")]
-        public readonly int TotalRejected;
-
-        [JsonProperty("numbers_sent")]
-        public readonly List<string> NumbersSent;
-
-        [JsonProperty("credit_used")]
-        public readonly int CreditUsed;
-
-        [JsonProperty("credit_left")]
-        public readonly int CreditLeft;
     }
 }

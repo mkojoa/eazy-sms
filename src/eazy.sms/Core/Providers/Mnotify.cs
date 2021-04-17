@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
@@ -8,25 +6,20 @@ using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace eazy.sms.Core.Providers
 {
     public class Mnotify : INotification
     {
         private readonly IServiceCollection _services;
-        //private EventMessage Created { get; set; }
 
-        public Mnotify(string apiKey, string apiSecret, IServiceCollection services)
+        public Mnotify(string apiKey, IServiceCollection services)
         {
             ApiKey = apiKey;
-            ApiSecret = apiSecret;
             _services = services;
         }
 
         private string ApiKey { get; }
-        private string ApiSecret { get; }
 
         public async Task NotifyAsync<T>(Notifiable<T> notifiable)
         {
@@ -41,31 +34,33 @@ namespace eazy.sms.Core.Providers
             var data = new
             {
                 message = $"{message}",
-                recipient = recipient,
+                recipient,
                 sender = $"{sender}",
                 schedule_date = $"{scheduleDate}",
                 is_schedule = $"{isSchedule}"
             };
 
-            IServiceScopeFactory scopeFactory = _services
+            var scopeFactory = _services
                 .BuildServiceProvider()
                 .GetRequiredService<IServiceScopeFactory>();
 
             var stream = await CreateStream(scopeFactory, data);
- 
+
             // push to gateway
             var gateway = await ApiCallHelper<Response>.PostRequest(
                 $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
-                );
+            );
 
             if (gateway.Code == "2000")
             {
                 stream.Status = 1;
+                stream.ExceptionStatus = gateway.Code;
                 await UpdateStream(scopeFactory, stream);
             }
             else
             {
                 stream.Exceptions = gateway.Message;
+                stream.ExceptionStatus = gateway.Code;
                 stream.Status = 0;
                 await UpdateStream(scopeFactory, stream);
             }
@@ -74,15 +69,16 @@ namespace eazy.sms.Core.Providers
         //=========================================
         //===========  Helper Methods  ============
         //=========================================
-        public static async Task<EventMessage> CreateStream(IServiceScopeFactory scopeFactory, object data)
+        private static async Task<EventMessage> CreateStream(IServiceScopeFactory scopeFactory, object data)
         {
-            using IServiceScope scope = scopeFactory.CreateScope();
+            using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
                 Message = data.ToString(),
                 Exceptions = "",
+                ExceptionStatus = "",
                 Status = 0
             });
             provider.Commit();
@@ -90,16 +86,17 @@ namespace eazy.sms.Core.Providers
             return result;
         }
 
-        public static async Task UpdateStream(IServiceScopeFactory scopeFactory, EventMessage data)
+        private static async Task UpdateStream(IServiceScopeFactory scopeFactory, EventMessage data)
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             await provider.UpdateDataAsync(new EventMessage
             {
+                Id = data.Id,
                 Message = data.Message,
                 Exceptions = data.Exceptions,
-                UpdatedAt = DateTime.Now,
+                ExceptionStatus = data.ExceptionStatus,
                 Status = data.Status
             });
             provider.Commit();

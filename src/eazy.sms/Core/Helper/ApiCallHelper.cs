@@ -8,11 +8,9 @@ namespace eazy.sms.Core.Helper
 {
     public static class ApiCallHelper<T> where T : class
     {
-
-
         public static string ToDynamicJson(T data)
         {
-            return JsonConvert.SerializeObject(data);// JsonConvert.DeserializeObject<T>(data.ToString());
+            return JsonConvert.SerializeObject(data); // JsonConvert.DeserializeObject<T>(data.ToString());
         }
 
 

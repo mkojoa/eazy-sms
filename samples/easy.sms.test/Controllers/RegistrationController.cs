@@ -16,15 +16,15 @@ namespace easy.sms.test.Controllers
             _notification = notification;
         }
 
-        [HttpGet("Register")]
-        public async Task<IActionResult> Register()
+        [HttpGet("Register/{message}")]
+        public async Task<IActionResult> Register(string message)
         {
             //Create new user
 
             //call this after creating user to send email
-            await _notification.NotifyAsync(new AccountCreatedNotifiable("Hi!, Message from big bro"));
+            await _notification.NotifyAsync(new AccountCreatedNotifiable($"{message}"));
 
-            return Ok("Message sent to registered users");
+            return Ok("Message has been processed");
         }
     }
 }
