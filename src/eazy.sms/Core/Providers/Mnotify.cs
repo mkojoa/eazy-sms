@@ -58,9 +58,17 @@ namespace eazy.sms.Core.Providers
                 $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
                 );
 
-
-            await UpdateStream(scopeFactory, stream);
-            
+            if (gateway.Code == "2000")
+            {
+                stream.Status = 1;
+                await UpdateStream(scopeFactory, stream);
+            }
+            else
+            {
+                stream.Exceptions = gateway.Message;
+                stream.Status = 0;
+                await UpdateStream(scopeFactory, stream);
+            }
         }
 
         //=========================================
@@ -92,16 +100,9 @@ namespace eazy.sms.Core.Providers
                 Message = data.Message,
                 Exceptions = data.Exceptions,
                 UpdatedAt = DateTime.Now,
-                Status = 1
+                Status = data.Status
             });
             provider.Commit();
         }
-
-        
-    }
-
-    public class User
-    { 
-        public string success { get; set; }
     }
 }
