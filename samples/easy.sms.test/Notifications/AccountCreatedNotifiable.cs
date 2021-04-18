@@ -1,17 +1,18 @@
-﻿using eazy.sms.Common;
+﻿using easy.sms.test.Models;
+using eazy.sms.Common;
 using eazy.sms.Core;
 using eazy.sms.Model;
 
 namespace easy.sms.test.Notifications
 {
-    public class AccountCreatedNotifiable : Notifiable<string>
+    public class AccountCreatedNotifiable : Notifiable<AccountDto>
     {
-        public AccountCreatedNotifiable(string message)
+        public AccountCreatedNotifiable(AccountDto accountDto)
         {
-            Message = message;
+            _AccountDto = accountDto;
         }
 
-        private string Message { get; }
+        private AccountDto _AccountDto { get; } 
 
         protected override void Boot()
         {
@@ -24,9 +25,10 @@ namespace easy.sms.test.Notifications
                         "0553771219"
                     }
                 )
-                .Body(new Body {Content = $"{Message}"})
-                .Schedule(false, "")
-                .Attach(new Attachment {Path = "", File = "audio.mp3"})
+                //.Content(new Content($"{Message}"))
+                .Schedule(false, "2021-04-08 06:00")
+                .Attach(new Attachment { File = "ringtone.mp3" })
+                .Template("AccountRegistration.txt", _AccountDto)
                 .Channel(SMSChannel.Mnotify);
         }
     }

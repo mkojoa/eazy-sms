@@ -1,13 +1,14 @@
 ﻿namespace eazy.sms.Common
 {
     /// <summary>
+    /// Get the notification's delivery channels.
     /// </summary>
     public enum SMSChannel
     {
-        /// <summary>
-        ///     Messages will be sent using hubtel gateway
-        /// </summary>
-        Hubtel,
+        ///// <summary>
+        /////     Messages will be sent using hubtel gateway
+        ///// </summary>
+        //Hubtel,
 
         /// <summary>
         ///     Send messages using Mnotify gateway

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
@@ -31,13 +32,25 @@ namespace eazy.sms.Core.Providers
         {
             var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
 
+            //Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");   // You can use your own method over here.         
+            //return File(b, "image/jpeg");
+
             var data = new
             {
+                // param
+                
                 message = $"{message}",
                 recipient,
                 sender = $"{sender}",
+
+                //optional
                 schedule_date = $"{scheduleDate}",
-                is_schedule = $"{isSchedule}"
+                is_schedule = $"{isSchedule}",
+
+                //for campaign
+                file = System.IO.File.ReadAllBytes($"{attachments.File}"),
+                voice_id = "",
+                campaign = $"{title}"
             };
 
             var scopeFactory = _services
@@ -46,23 +59,45 @@ namespace eazy.sms.Core.Providers
 
             var stream = await CreateStream(scopeFactory, data);
 
-            // push to gateway
-            var gateway = await ApiCallHelper<Response>.PostRequest(
-                $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
-            );
-
-            if (gateway.Code == "2000")
+            if (attachments != null)
             {
-                stream.Status = 1;
-                stream.ExceptionStatus = gateway.Code;
-                await UpdateStream(scopeFactory, stream);
+                // push to gateway
+                var gateway = await ApiCallHelper<Response>.PostRequest(
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
+                );
+                if (gateway.Code == "2000")
+                {
+                    stream.Status = 1;
+                    stream.ExceptionStatus = gateway.Code;
+                    await UpdateStream(scopeFactory, stream);
+                }
+                else
+                {
+                    stream.Exceptions = gateway.Message;
+                    stream.ExceptionStatus = gateway.Code;
+                    stream.Status = 0;
+                    await UpdateStream(scopeFactory, stream);
+                }
             }
             else
             {
-                stream.Exceptions = gateway.Message;
-                stream.ExceptionStatus = gateway.Code;
-                stream.Status = 0;
-                await UpdateStream(scopeFactory, stream);
+                // push to gateway
+                var gateway = await ApiCallHelper<Response>.PostRequest(
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
+                );
+                if (gateway.Code == "2000")
+                {
+                    stream.Status = 1;
+                    stream.ExceptionStatus = gateway.Code;
+                    await UpdateStream(scopeFactory, stream);
+                }
+                else
+                {
+                    stream.Exceptions = gateway.Message;
+                    stream.ExceptionStatus = gateway.Code;
+                    stream.Status = 0;
+                    await UpdateStream(scopeFactory, stream);
+                }
             }
         }
 
@@ -73,7 +108,7 @@ namespace eazy.sms.Core.Providers
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
                 Message = data.ToString(),

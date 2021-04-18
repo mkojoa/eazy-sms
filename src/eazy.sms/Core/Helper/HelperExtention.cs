@@ -24,6 +24,11 @@ namespace eazy.sms.Core.Helper
             if (!File.Exists(file)) File.Create(file).Close();
         }
 
+        internal static bool CheckIfExistFile(string file)
+        {
+            return (File.Exists(file));
+        }
+
         public static void LogWrite(string logMessage)
         {
             var appDir = Directory.GetCurrentDirectory() + "\\Logs";

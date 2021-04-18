@@ -16,13 +16,20 @@ namespace eazy.sms
         {
             EfCoreIoC(services, configuration);
 
-            INotification notification = new Mnotify(
+            INotification mnotify = new Mnotify(
                 configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
                 services
             );
+             
+            //INotification hubtel = new Hubtel(
+            //    configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
+            //    configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
+            //    services
+            //);
 
 
-            services.AddSingleton(notification);
+            services.AddSingleton(mnotify);
+            //services.AddSingleton(hubtel);
 
             return services;
         }

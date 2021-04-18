@@ -2,12 +2,16 @@
 
 namespace eazy.sms.Model
 {
-    public class Body
+    public class Content
     {
         /// <summary>
         ///     The actual text body of the message.
         /// </summary>
-        [JsonProperty("content")]
-        public string Content { get; set; }
+        public string _Content { get; set; }
+
+        public Content(string content)
+        {
+            _Content = content;
+        }
     }
 }

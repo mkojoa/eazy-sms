@@ -20,13 +20,11 @@ namespace eazy.sms.Core
         ///     Required: This is the sender name.
         ///     The maximum length is 11 alphanumerical characters.
         /// </summary>
-        [JsonProperty("from")]
         private string _From { get; set; }
 
         /// <summary>
         ///     Required: The destination mobile numbers.
         /// </summary>
-        [JsonProperty("to")]
         private string[] _SmsRecipients { get; set; }
 
         /// <summary>
@@ -52,13 +50,11 @@ namespace eazy.sms.Core
         /// <summary>
         ///     Required: The actual text body of the message.
         /// </summary>
-        [JsonProperty("body")]
-        private Body _Body { get; set; }
+        private Content _Content { get; set; }
 
         /// <summary>
         ///     Optional : FileName.ext && Path to file
         /// </summary>
-        [JsonProperty("attachment")]
         private Attachment _Attachment { get; set; }
 
         /// <summary>
@@ -126,13 +122,14 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="body"></param>
         /// <returns></returns>
-        public Notifiable<T> Body(Body body)
+        public Notifiable<T> Content(Content content)
         {
-            _Body = body;
+            _Content = content;
             return this;
         }
 
         /// <summary>
+        /// Get the notification's delivery channels.
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
@@ -147,10 +144,16 @@ namespace eazy.sms.Core
         /// <param name="templatePath"></param>
         /// <param name="templateModel"></param>
         /// <returns></returns>
-        public Notifiable<T> Template(string templatePath, T templateModel = default)
+        public Notifiable<T> Template(string templatePath, T templateModel)
         {
             _TemplateModel = templateModel;
             _TemplatePath = templatePath;
+            return this;
+        }
+
+        public Notifiable<T> Template(string templatePath)
+        {
+            Template(templatePath, default);
             return this;
         }
 
@@ -166,6 +169,9 @@ namespace eazy.sms.Core
             var msg = await BuildMsg()
                 .ConfigureAwait(false);
 
+            var attach = await BuildAttach()
+                .ConfigureAwait(false);
+
             await notification.NotifyAsync(
                 msg,
                 _Subject,
@@ -177,13 +183,22 @@ namespace eazy.sms.Core
             ).ConfigureAwait(true);
         }
 
+        private async Task<Attachment> BuildAttach()
+        {
+            if (_Attachment != null)
+                return await TemplateRenderer.RenderAttachmentToAttachAsync(_Attachment)
+                    .ConfigureAwait(false);
+
+            return _Attachment;
+        }
+
         /// <summary>
         ///     Prepare message
         /// </summary>
         /// <returns></returns>
         private async Task<string> BuildMsg()
         {
-            if (_Body != null) return _Body.Content;
+            if (_Content != null) return _Content._Content;
 
             if (_TemplatePath != null)
                 return await TemplateRenderer.RenderTemplateToStringAsync(_TemplatePath, _TemplateModel)
