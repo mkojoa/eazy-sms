@@ -114,7 +114,15 @@ namespace eazy.sms.Core
         public Notifiable<T> Schedule(bool isSchedule = false, string scheduleDate = null)
         {
             _IsSchedule = isSchedule;
-            _ScheduleDate = scheduleDate;
+            if (!_IsSchedule)
+            {
+                _ScheduleDate = "";
+            }
+            else
+            {
+                _ScheduleDate = scheduleDate;
+            }
+           
             return this;
         }
 
@@ -179,7 +187,7 @@ namespace eazy.sms.Core
                 _From,
                 _ScheduleDate,
                 _IsSchedule,
-                _Attachment
+                attach
             ).ConfigureAwait(true);
         }
 

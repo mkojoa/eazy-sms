@@ -33,9 +33,23 @@ namespace eazy.sms.Core.Providers
             var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
 
             //Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");   // You can use your own method over here.         
-            //return File(b, "image/jpeg");
+            //File(b, "image/jpeg");
+            var file = System.IO.File.Open(attachments.File, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+           //{
+           //    "flac": ["audio/flac"],
+           // "m3u": ["audio/mpegurl", "text/plain"],
+           // "m3u8": ["audio/mpegurl", "text/plain"],
+           // "m4a": ["audio/mp4"],
+           // "m4b": ["audio/mp4"],
+           // "mp3": ["audio/mpeg"],
+           // "ogg": ["audio/ogg"],
+           // "opus": ["audio/ogg"],
+           // "pls": ["audio/x-scpls", "text/plain"],
+           // "wav": ["audio/wav"],
+           // "aac": ["audio/aac"]
+           //}
 
-            var data = new
+           var data = new
             {
                 // param
                 
@@ -48,7 +62,7 @@ namespace eazy.sms.Core.Providers
                 is_schedule = $"{isSchedule}",
 
                 //for campaign
-                file = System.IO.File.ReadAllBytes($"{attachments.File}"),
+                file = $"{file}",
                 voice_id = "",
                 campaign = $"{title}"
             };
@@ -63,7 +77,7 @@ namespace eazy.sms.Core.Providers
             {
                 // push to gateway
                 var gateway = await ApiCallHelper<Response>.PostRequest(
-                    $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000")
                 {
