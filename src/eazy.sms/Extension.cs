@@ -20,7 +20,7 @@ namespace eazy.sms
                 configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
                 services
             );
-             
+
             //INotification hubtel = new Hubtel(
             //    configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),
             //    configuration.GetValue("EazyConfig:SMS:ApiKey", "test"),

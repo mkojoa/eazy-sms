@@ -12,7 +12,7 @@ namespace easy.sms.test.Notifications
             _AccountDto = accountDto;
         }
 
-        private AccountDto _AccountDto { get; } 
+        private AccountDto _AccountDto { get; }
 
         protected override void Boot()
         {
@@ -27,7 +27,7 @@ namespace easy.sms.test.Notifications
                 )
                 //.Content(new Content($"{Message}"))
                 .Schedule(false, "") // 2021-04-08 06:00
-                .Attach(new Attachment { File = "ringtone.mp3" })
+                .Attach(new Attachment {File = "ringtone.mp3"})
                 .Template("AccountRegistration.txt", _AccountDto)
                 .Channel(SMSChannel.Mnotify);
         }

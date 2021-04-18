@@ -21,7 +21,7 @@ namespace easy.sms.test.Controllers
         public async Task<IActionResult> Register()
         {
             //Create new user
-            var accountUser = new AccountDto { Username = "Michael Ameyaw" };
+            var accountUser = new AccountDto {Username = "Michael Ameyaw"};
 
             //call this after creating user to send email
             await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));

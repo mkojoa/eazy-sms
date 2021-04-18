@@ -115,14 +115,10 @@ namespace eazy.sms.Core
         {
             _IsSchedule = isSchedule;
             if (!_IsSchedule)
-            {
                 _ScheduleDate = "";
-            }
             else
-            {
                 _ScheduleDate = scheduleDate;
-            }
-           
+
             return this;
         }
 
@@ -137,7 +133,7 @@ namespace eazy.sms.Core
         }
 
         /// <summary>
-        /// Get the notification's delivery channels.
+        ///     Get the notification's delivery channels.
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>

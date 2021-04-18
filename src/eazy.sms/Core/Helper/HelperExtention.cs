@@ -26,7 +26,7 @@ namespace eazy.sms.Core.Helper
 
         internal static bool CheckIfExistFile(string file)
         {
-            return (File.Exists(file));
+            return File.Exists(file);
         }
 
         public static void LogWrite(string logMessage)

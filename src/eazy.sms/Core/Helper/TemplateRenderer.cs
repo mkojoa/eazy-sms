@@ -1,8 +1,8 @@
-﻿using eazy.sms.Model;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using eazy.sms.Model;
 
 namespace eazy.sms.Core.Helper
 {
@@ -16,24 +16,17 @@ namespace eazy.sms.Core.Helper
             HelperExtention.CreateDirectoryIfDoesNotExist(appDirectory);
 
 
-            var filename = appDirectory +"\\"+ templateName;
+            var filename = appDirectory + "\\" + templateName;
 
             HelperExtention.CreateFileIfDoesNotExist(filename);
 
 
-            
             var content = await HelperExtention.LoadTextFile(filename);
 
-            
-            if (string.IsNullOrEmpty(content))
-            {
-                throw new ArgumentNullException(nameof(content));
-            }
 
-            if (model == null)
-            {
-                return content;
-            }
+            if (string.IsNullOrEmpty(content)) throw new ArgumentNullException(nameof(content));
+
+            if (model == null) return content;
 
             var properties = model.GetType().GetProperties();
 
@@ -54,14 +47,9 @@ namespace eazy.sms.Core.Helper
             HelperExtention.CreateDirectoryIfDoesNotExist(appDirectory);
             var filename = appDirectory + "\\" + attachment.File;
 
-            if (!HelperExtention.CheckIfExistFile(filename))
-            {
-                throw new ArgumentNullException(nameof(filename));
-            }
+            if (!HelperExtention.CheckIfExistFile(filename)) throw new ArgumentNullException(nameof(filename));
 
-            return  new Attachment() { File = filename };           
+            return new Attachment {File = filename};
         }
-
-
     }
 }

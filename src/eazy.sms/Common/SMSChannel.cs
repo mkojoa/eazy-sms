@@ -1,7 +1,7 @@
 ﻿namespace eazy.sms.Common
 {
     /// <summary>
-    /// Get the notification's delivery channels.
+    ///     Get the notification's delivery channels.
     /// </summary>
     public enum SMSChannel
     {

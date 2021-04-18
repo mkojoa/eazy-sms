@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Common;
@@ -34,25 +34,25 @@ namespace eazy.sms.Core.Providers
 
             //Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");   // You can use your own method over here.         
             //File(b, "image/jpeg");
-            var file = System.IO.File.Open(attachments.File, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-           //{
-           //    "flac": ["audio/flac"],
-           // "m3u": ["audio/mpegurl", "text/plain"],
-           // "m3u8": ["audio/mpegurl", "text/plain"],
-           // "m4a": ["audio/mp4"],
-           // "m4b": ["audio/mp4"],
-           // "mp3": ["audio/mpeg"],
-           // "ogg": ["audio/ogg"],
-           // "opus": ["audio/ogg"],
-           // "pls": ["audio/x-scpls", "text/plain"],
-           // "wav": ["audio/wav"],
-           // "aac": ["audio/aac"]
-           //}
+            //var file = File.Open(attachments.File, FileMode.Open, FileAccess.Read);
+            //{
+            //    "flac": ["audio/flac"],
+            // "m3u": ["audio/mpegurl", "text/plain"],
+            // "m3u8": ["audio/mpegurl", "text/plain"],
+            // "m4a": ["audio/mp4"],
+            // "m4b": ["audio/mp4"],
+            // "mp3": ["audio/mpeg"],
+            // "ogg": ["audio/ogg"],
+            // "opus": ["audio/ogg"],
+            // "pls": ["audio/x-scpls", "text/plain"],
+            // "wav": ["audio/wav"],
+            // "aac": ["audio/aac"]
+            //}
 
-           var data = new
+            var data = new
             {
                 // param
-                
+
                 message = $"{message}",
                 recipient,
                 sender = $"{sender}",
@@ -62,7 +62,7 @@ namespace eazy.sms.Core.Providers
                 is_schedule = $"{isSchedule}",
 
                 //for campaign
-                file = $"{file}",
+                file = $"{attachments?.File}",
                 voice_id = "",
                 campaign = $"{title}"
             };
@@ -122,7 +122,7 @@ namespace eazy.sms.Core.Providers
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
                 Message = data.ToString(),

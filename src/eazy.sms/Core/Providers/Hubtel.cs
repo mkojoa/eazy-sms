@@ -1,8 +1,4 @@
-﻿using eazy.sms.Model;
-using Microsoft.Extensions.DependencyInjection;
-using System.Threading.Tasks;
-
-namespace eazy.sms.Core.Providers
+﻿namespace eazy.sms.Core.Providers
 {
     //public class Hubtel : INotification
     //{
