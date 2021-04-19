@@ -15,16 +15,40 @@ using mnotify, hubtel sms gateway , etc.. in your .netcore applications.
 
 
 > `eazy-sms` repository is work in progress and hope to support mobile money, ussd, etc.
-> 
+
+
 #### Getting Started
-Each notification is represented by a single class and stored in the Notifications 
-directory.
+`AddEazySms(Configuration)` which accepts IConfiguration object  must be injected in `ConfigureServices` method in the `Startup` class.
+
+> ConfigureServices
+   ```c#
+    //ConfigureServices Method.
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddEazySms(Configuration);
+    }
+
+    // Configure Method.
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    {
+        app.UseEazySms(Configuration);
+    }
+   ```
+
+> Each notification is represented by a single class and stored in the Notifications 
+> directory.
 
 ###### Using The Notifiable
 The `NotifyAsync` method that is provided by `INotification` interface expects to 
 receive a notification instance.
+In other to use the `NotifyAsync` method you need to inject the `INotification` 
+interface in your contructor.
+
+```c#
+  await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));
+```
 
 ###### Specifying Delivery Channels
-Every notification class has a `Boot` for building up the notification message and 
+Every notification class has a `Boot` method for building the notification message and 
 also to specify the delivery channel.
 

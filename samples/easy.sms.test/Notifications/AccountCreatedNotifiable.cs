@@ -26,7 +26,7 @@ namespace easy.sms.test.Notifications
                     }
                 )
                 //.Content(new Content($"{Message}"))
-                .Schedule(false, "") // 2021-04-08 06:00
+                .Schedule(false, "2021-04-08 06:00")
                 .Attach(new Attachment {File = "ringtone.mp3"})
                 .Template("AccountRegistration.txt", _AccountDto)
                 .Channel(SMSChannel.Mnotify);
