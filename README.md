@@ -67,8 +67,6 @@ using mnotify, hubtel sms gateway , etc.. in your .netcore applications.
 5.  `From` -- Name of the server. visit provider for senderId or Name.
 
 
-> Each notification is represented by a single class and stored in the Notifications 
-> directory.
 
 ###### Using The Notifiable
 The `NotifyAsync` method that is provided by `INotification` interface expects to 
@@ -82,5 +80,42 @@ interface in your contructor.
 
 ###### Specifying Delivery Channels
 Every notification class has a `Boot` method for building the notification message and 
-also to specify the delivery channel.
+each notification is represented by a single class and stored in the `Notifications`
+directory.
+
+
+
+```c# 
+public class AccountCreatedNotifiable : Notifiable<string>
+{
+        
+    protected override void Boot()
+    {
+        //logic...
+        From("Melteck")
+            .Subject("Account Created")
+            .Recipient(new[]
+                {
+                    "0276002658",
+                    "0553771219"
+                }
+            )
+            //.Content(new Content("message body}"))
+            .Schedule(false, "2021-04-08 06:00")
+            .Attach(new Attachment {File = "ringtone.mp3"})
+            .Template("AccountRegistration.txt", "pass dto to a template")
+            .Channel(SMSChannel.Mnotify);
+    }
+}
+```
+- Available Methods that can be used  in the `boot method` of every notification class.
+1. `From` - sender name or sender Id
+2. `Subject` - message title
+3. `Recipient` - an array of number to recieve the sms
+4. `Schedule` -  for Scheduling sms.
+5. `Content` -  body of the message
+6. `Attach` - Accept voice file.
+7. `Template`
+8. `Channel` - specifying delivery channels
+
 
