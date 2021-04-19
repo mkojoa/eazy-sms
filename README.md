@@ -5,20 +5,23 @@ using mnotify, hubtel sms gateway , etc.. in your .netcore applications.
  ![ ](https://vistr.dev/badge?repo=mkojoa.eazy-sms&color=0058AD)
 
 ###### SMS Providers
-- [ ] Mnotify
+- [X] Mnotify
 - [ ] Hubtel
+- [ ] Dashboard
 
 ###### SMS Channels
-- [ ] SMS
+- [X] SMS
 - [ ] Mail
 
- `eazy-sms` Library repository is work in progress and hope to support mobile money, ussd, etc.
- Each notification is represented by a single class that is typically 
+`eazy-sms` Library repository is work in progress and hope to support mobile money, ussd, etc.
+Each notification is represented by a single class that is typically 
 stored in the Notifications directory.
 
 ###### Using The Notifiable
-The `NotifyAsync` method that is provided by this Interface expects to 
+The `NotifyAsync` method that is provided by INotification Interface expects to 
 receive a notification instance.
 
 ###### Specifying Delivery Channels
-Every notification class has a `Boot` and Channel method that determines on which channels the notification will be delivered. 
+Every notification class has a `Boot` for building up the notification message and 
+also to specify the delivery channel. 
+
