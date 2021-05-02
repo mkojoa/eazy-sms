@@ -32,23 +32,6 @@ namespace eazy.sms.Core.Providers
         {
             var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
 
-            //Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");   // You can use your own method over here.         
-            //File(b, "image/jpeg");
-            //var file = File.Open(attachments.File, FileMode.Open, FileAccess.Read);
-            //{
-            //    "flac": ["audio/flac"],
-            // "m3u": ["audio/mpegurl", "text/plain"],
-            // "m3u8": ["audio/mpegurl", "text/plain"],
-            // "m4a": ["audio/mp4"],
-            // "m4b": ["audio/mp4"],
-            // "mp3": ["audio/mpeg"],
-            // "ogg": ["audio/ogg"],
-            // "opus": ["audio/ogg"],
-            // "pls": ["audio/x-scpls", "text/plain"],
-            // "wav": ["audio/wav"],
-            // "aac": ["audio/aac"]
-            //}
-
             var data = new
             {
                 // param
@@ -62,7 +45,7 @@ namespace eazy.sms.Core.Providers
                 is_schedule = $"{isSchedule}",
 
                 //for campaign
-                file = $"{attachments?.File}",
+                file = $"@{attachments?.File}",
                 voice_id = "",
                 campaign = $"{title}"
             };
