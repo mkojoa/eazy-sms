@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
@@ -35,7 +36,6 @@ namespace eazy.sms.Core.Providers
             var data = new
             {
                 // param
-
                 message = $"{message}",
                 recipient,
                 sender = $"{sender}",
@@ -45,10 +45,12 @@ namespace eazy.sms.Core.Providers
                 is_schedule = $"{isSchedule}",
 
                 //for campaign
-                file = $"@{attachments?.File}",
+                file = attachments?.File,
                 voice_id = "",
                 campaign = $"{title}"
             };
+
+            
 
             var scopeFactory = _services
                 .BuildServiceProvider()
@@ -59,10 +61,10 @@ namespace eazy.sms.Core.Providers
             if (attachments != null)
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<Response>.PostRequest(
+                var gateway = await ApiCallHelper<Response>.PostRequestWithAudioFile(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
-                if (gateway.Code == "2000")
+                if (gateway.Code == "2000") 
                 {
                     stream.Status = 1;
                     stream.ExceptionStatus = gateway.Code;

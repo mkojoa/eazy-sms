@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Threading.Tasks;
@@ -66,6 +67,36 @@ namespace eazy.sms.Core.Helper
             return result;
         }
 
+        public static async Task<T> PostRequestWithAudioFile(string apiUrl, object postObject)
+        {
+            T result = null;
+
+            using var httpClient = new HttpClient();
+            using var request = new HttpRequestMessage(new HttpMethod("POST"), apiUrl);
+            var multipartContent = new MultipartFormDataContent();
+            multipartContent.Add(new StringContent("0553771219"), "recipient[]");
+            multipartContent.Add(new ByteArrayContent(File.ReadAllBytes("C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3")), "file", Path.GetFileName("C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3"));
+            multipartContent.Add(new StringContent(""), "voice_id");
+            multipartContent.Add(new StringContent("false"), "is_schedule");
+            multipartContent.Add(new StringContent(""), "schedule_date");
+            request.Content = multipartContent;
+
+            var response = await httpClient.SendAsync(request);
+
+
+            response.EnsureSuccessStatusCode();
+
+            await response.Content.ReadAsStringAsync().ContinueWith(x =>
+            {
+                if (x.IsFaulted)
+                    if (x.Exception != null)
+                        throw x.Exception;
+
+                result = JsonConvert.DeserializeObject<T>(x.Result);
+            });
+
+            return result;
+        }
         /// <summary>
         ///     For updating an existing item over a web api using PUT
         /// </summary>
