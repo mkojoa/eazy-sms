@@ -75,7 +75,12 @@ namespace eazy.sms.Core.Helper
             using var request = new HttpRequestMessage(new HttpMethod("POST"), apiUrl);
             var multipartContent = new MultipartFormDataContent();
             multipartContent.Add(new StringContent("0553771219"), "recipient[]");
-            multipartContent.Add(new ByteArrayContent(File.ReadAllBytes("C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3")), "file", Path.GetFileName("C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3"));
+            multipartContent.Add(
+                new ByteArrayContent(File.ReadAllBytes(
+                    "C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3")),
+                "file",
+                Path.GetFileName(
+                    "C:\\Users\\cyber\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3"));
             multipartContent.Add(new StringContent(""), "voice_id");
             multipartContent.Add(new StringContent("false"), "is_schedule");
             multipartContent.Add(new StringContent(""), "schedule_date");
@@ -97,6 +102,7 @@ namespace eazy.sms.Core.Helper
 
             return result;
         }
+
         /// <summary>
         ///     For updating an existing item over a web api using PUT
         /// </summary>

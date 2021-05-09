@@ -1,6 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Net.Http;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
@@ -50,7 +48,6 @@ namespace eazy.sms.Core.Providers
                 campaign = $"{title}"
             };
 
-            
 
             var scopeFactory = _services
                 .BuildServiceProvider()
@@ -64,7 +61,7 @@ namespace eazy.sms.Core.Providers
                 var gateway = await ApiCallHelper<Response>.PostRequestWithAudioFile(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
-                if (gateway.Code == "2000") 
+                if (gateway.Code == "2000")
                 {
                     stream.Status = 1;
                     stream.ExceptionStatus = gateway.Code;
