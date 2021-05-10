@@ -1,17 +1,15 @@
 # eazy-sms
 This library aims to provide easy way in sending sms 
-using mnotify, hubtel sms gateway , etc.. in your .netcore applications.
+using mnotify sms gateway , etc.. in your `.netcore >= 3.1` applications.
 
  ![ ](https://vistr.dev/badge?repo=mkojoa.eazy-sms&color=0058AD)
 
 ###### SMS Providers
 - [X] [Mnotify](https://mnotify.com)
-- [ ] Hubtel
 - [ ] Dashboard - Resend failed SMS Message.
 
-###### SMS Channels
+###### SMS Channel
 - [X] SMS
-- [ ] Mail
 
 
 > `eazy-sms` repository is work in progress... 
