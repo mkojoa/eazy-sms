@@ -2,6 +2,7 @@
 using eazy.sms.Common;
 using eazy.sms.Core.Exceptions;
 using eazy.sms.Core.Helper;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -165,7 +166,7 @@ namespace eazy.sms.Core
         {
         }
 
-        internal async Task SendAsync(INotification notification)
+        internal async Task<ResponseDto> SendAsync(INotification notification)
         {
             Boot();
 
@@ -176,7 +177,7 @@ namespace eazy.sms.Core
             var attach = await BuildAttach()
                 .ConfigureAwait(false);
 
-            await notification.NotifyAsync(
+           return await notification.NotifyAsync(
                 msg,
                 _Subject,
                 _SmsRecipients,

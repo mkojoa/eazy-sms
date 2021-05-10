@@ -24,9 +24,9 @@ namespace easy.sms.test.Controllers
             var accountUser = new AccountDto {Username = "Michael Ameyaw"};
 
             //call this after creating user to send email
-            await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));
+            var sms = await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));
 
-            return Ok("Message has been processed");
+            return Ok(sms);
         }
     }
 }
