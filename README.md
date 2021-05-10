@@ -15,6 +15,11 @@ using mnotify sms gateway , etc.. in your `.netcore >= 3.1` applications.
 > `eazy-sms` repository is work in progress... 
 
 
+## Get Started
+
+#### (Not Yet) Installation 
+    - Install-Package eazy-sms
+
 #### Getting Started
 `AddEazySms(Configuration)` which accepts IConfiguration object  must be injected in `ConfigureServices` method in the `Startup` class.
 
