@@ -6,6 +6,7 @@ using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -61,7 +62,7 @@ namespace eazy.sms.Core.Providers
             if (attachments != null)
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<Response>.PostRequestWithAudioFile(
+                var gateway = await ApiCallHelper<Response>.PostRequest(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000") 
@@ -81,7 +82,7 @@ namespace eazy.sms.Core.Providers
             else
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<Response>.PostRequest(
+                var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000")
