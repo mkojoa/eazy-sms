@@ -32,7 +32,7 @@ namespace eazy.sms.Core.Providers
         public async Task<ResponseDto> NotifyAsync(string message, string title, string[] recipient, string sender,
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
-            string[] group = new string[] { "1", "2", "3", "4" };
+            string[] group = null;// new string[] { "1", "2", "3", "4" };
             string messageId = null;
 
             //init data object

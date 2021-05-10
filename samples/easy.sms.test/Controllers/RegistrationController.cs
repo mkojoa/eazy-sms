@@ -2,6 +2,7 @@
 using easy.sms.test.Models;
 using easy.sms.test.Notifications;
 using eazy.sms.Core;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace easy.sms.test.Controllers
@@ -18,7 +19,7 @@ namespace easy.sms.test.Controllers
         }
 
         [HttpGet("Register")]
-        public async Task<IActionResult> Register()
+        public async Task<ResponseDto> Register()
         {
             //Create new user
             var accountUser = new AccountDto {Username = "Michael Ameyaw"};
@@ -26,7 +27,7 @@ namespace easy.sms.test.Controllers
             //call this after creating user to send email
             var sms = await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));
 
-            return Ok(sms);
+            return sms;
         }
     }
 }
