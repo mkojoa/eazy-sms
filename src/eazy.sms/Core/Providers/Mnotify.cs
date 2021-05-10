@@ -1,11 +1,11 @@
 ﻿using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
-using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -45,10 +45,12 @@ namespace eazy.sms.Core.Providers
                 is_schedule = $"{isSchedule}",
 
                 //for campaign
-                file = $"{attachments?.File}",
+                file = attachments?.File,
                 voice_id = "",
                 campaign = $"{title}"
             };
+
+            
 
             var scopeFactory = _services
                 .BuildServiceProvider()
@@ -59,10 +61,10 @@ namespace eazy.sms.Core.Providers
             if (attachments != null)
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
+                var gateway = await ApiCallHelper<Response>.PostRequestWithAudioFile(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
-                if (gateway.Code == "2000")
+                if (gateway.Code == "2000") 
                 {
                     stream.Status = 1;
                     stream.ExceptionStatus = gateway.Code;
@@ -79,7 +81,7 @@ namespace eazy.sms.Core.Providers
             else
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
+                var gateway = await ApiCallHelper<Response>.PostRequest(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000")
