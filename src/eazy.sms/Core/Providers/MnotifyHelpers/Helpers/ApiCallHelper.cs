@@ -1,4 +1,5 @@
-﻿using eazy.sms.Core.Providers.MnotifyHelpers.Models;
+﻿using eazy.sms.Core.Helper;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,14 +19,10 @@ namespace eazy.sms.Core.Providers.MnotifyHelpers.Helpers
         {
             TResult result = null;
 
-            var jsonString = JsonConvert.SerializeObject(data);
-
             using var httpClient = new HttpClient();
             using var request = new HttpRequestMessage(new HttpMethod("POST"), apiUrl)
             {
-                Content = new StringContent(jsonString),
-                //("{\"recipient\":[\"0249706365\",\"0203698970\"], \"sender\":\"mNotify\", \"message\":\"API messaging is fun!\", \"is_schedule\":false, \"schedule_date\":\"\"}")
-
+                Content = new StringContent(HelperExtention.ToDynamicJson(data)),
             };
             request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
@@ -44,6 +41,64 @@ namespace eazy.sms.Core.Providers.MnotifyHelpers.Helpers
 
             return result;
         }
+        public static async Task<TResult> CampaignGroup(string apiUrl, DataDto data)
+        {
+            TResult result = null;
+
+            using (var httpClient = new HttpClient())
+            {
+                using var request = new HttpRequestMessage(
+                    new HttpMethod("POST"), 
+                    $"{apiUrl}");
+                request.Content = new StringContent(HelperExtention.ToDynamicJson(data));
+                    //("{\"group_id\":[\"1\",\"2\"], \"message_id\":\"17481\", }");
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
+                var response = await httpClient.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+
+                await response.Content.ReadAsStringAsync().ContinueWith(x =>
+                {
+                    if (x.IsFaulted)
+                        if (x.Exception != null)
+                            throw x.Exception;
+
+                    result = JsonConvert.DeserializeObject<TResult>(x.Result);
+                });
+            }
+
+            return result;
+        }
+        public static async Task<TResult> CampaignGroupWithVoice(string apiUrl, DataDto data)
+        {
+            TResult result = null;
+             
+            using (var httpClient = new HttpClient())
+            {
+                using var request = new HttpRequestMessage(
+                    new HttpMethod("POST"),
+                    $"{apiUrl}");
+                request.Content = new StringContent(HelperExtention.ToDynamicJson(data));
+
+                request.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+
+                var response = await httpClient.SendAsync(request);
+
+                response.EnsureSuccessStatusCode();
+
+                await response.Content.ReadAsStringAsync().ContinueWith(x =>
+                {
+                    if (x.IsFaulted)
+                        if (x.Exception != null)
+                            throw x.Exception;
+
+                    result = JsonConvert.DeserializeObject<TResult>(x.Result);
+                });
+            }
+
+            return result;
+        }
         public static async Task<TResult> CampaignWithVoice(string apiUrl, DataDto data)
         {
             TResult result = null;
@@ -53,13 +108,13 @@ namespace eazy.sms.Core.Providers.MnotifyHelpers.Helpers
                 using var request = new HttpRequestMessage(new HttpMethod("POST"), $"{apiUrl}");
                 var multipartContent = new MultipartFormDataContent();
 
-                for (int i = 0; i < data.Recipient.Length; i++) // get all recipient http:localhost:887
+                for (int i = 0; i < data.Recipient.Length; i++)
                 {
                     multipartContent.Add(new StringContent(data.Recipient[i]), "recipient[]");
                 }
 
-                var voiceId = (data.VoiceId == null) ? "" : data.VoiceId;
-                var scheduleDate = (data.ScheduleDate == null) ? "" : data.ScheduleDate;
+                var voiceId = data.VoiceId ?? "";
+                var scheduleDate = data.ScheduleDate ?? "";
                  
                 multipartContent.Add(new ByteArrayContent(File.ReadAllBytes(data.File)), "file", Path.GetFileName(data.File));
                 multipartContent.Add(new StringContent(voiceId), "voice_id");

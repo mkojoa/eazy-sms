@@ -15,6 +15,7 @@ namespace eazy.sms.Core.Providers.MnotifyHelpers.Models
         [JsonProperty("file")] public string File { get; set; }
         [JsonProperty("voice_id")]  public string VoiceId { get; set; }
         [JsonProperty("campaign")]  public string Campaign { get; set; }
-        [JsonProperty("group_id")]  public string GroupId { get; set; } 
+        [JsonProperty("group_id")]  public string[] GroupId { get; set; } 
+        [JsonProperty("message_id")]  public string MessageId { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
+using eazy.sms.Core.Helper;
 using eazy.sms.Core.Providers.MnotifyHelpers.Helpers;
 using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
@@ -31,6 +32,9 @@ namespace eazy.sms.Core.Providers
         public async Task<ResponseDto> NotifyAsync(string message, string title, string[] recipient, string sender,
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
+            string[] group = new string[] { "1", "2", "3", "4" };
+            string messageId = null;
+
             //init data object
             var data = new DataDto
             {
@@ -43,13 +47,44 @@ namespace eazy.sms.Core.Providers
                 Campaign = title,
             };
 
+            var scopeFactory = _services
+                .BuildServiceProvider()
+                .GetRequiredService<IServiceScopeFactory>();
 
-            if (attachments != null)
+            var stream = await CreateStream(scopeFactory, data);
+
+
+            if (!HelperExtention.IsNullAttachment(attachments))
             {
                 campaign = await ApiCallHelper<ResponseDto>.CampaignWithVoice(
                         $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}",
                         data
                     );
+                await InsertOrUpdateRecord(scopeFactory, stream);
+
+                return campaign;
+            }
+            else if (!HelperExtention.IsNullGroupWithMessage(group, messageId))
+            {
+                campaign = await ApiCallHelper<ResponseDto>.CampaignGroup(
+                        $"{Constant.MnotifyGatewayJsonEndpoint}/sms/group?key={ApiKey}",
+                        data
+                    );
+
+                await InsertOrUpdateRecord(scopeFactory, stream);
+
+                return campaign;
+            }
+            else if (!HelperExtention.IsNullAttachmentWithGroup(attachments, group)) 
+            {
+                campaign = await ApiCallHelper<ResponseDto>.CampaignGroupWithVoice(
+                        $"{Constant.MnotifyGatewayJsonEndpoint}/voice/group?key={ApiKey}",
+                        data
+                    );
+
+                await InsertOrUpdateRecord(scopeFactory, stream);
+
+                return campaign;
             }
             else
             {
@@ -57,18 +92,14 @@ namespace eazy.sms.Core.Providers
                     $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}",
                     data
                 );
+
+                await InsertOrUpdateRecord(scopeFactory, stream);
+
+                return campaign;
             }
-
-              
-
-            var scopeFactory = _services
-                .BuildServiceProvider()
-                .GetRequiredService<IServiceScopeFactory>();
-
-            var stream = await CreateStream(scopeFactory, data);
-
-            return campaign;
         }
+
+        
 
         //=========================================
         //===========  Helper Methods  ============
@@ -105,46 +136,22 @@ namespace eazy.sms.Core.Providers
             });
             provider.Commit();
         }
+
+        private async Task InsertOrUpdateRecord(IServiceScopeFactory scopeFactory, EventMessage stream)
+        {
+            if (campaign.Code == ResultHelper.Ok)
+            {
+                stream.Status = 1;
+                stream.ExceptionStatus = campaign.Code;
+                await UpdateStream(scopeFactory, stream);
+            }
+            else
+            {
+                stream.Exceptions = campaign.Message;
+                stream.ExceptionStatus = campaign.Code;
+                stream.Status = 0;
+                await UpdateStream(scopeFactory, stream);
+            }
+        }
     }
 }
-
-//if (attachments != null)
-//{
-//    // push to gateway
-//    var gateway = await ApiCallHelper<Response>.PostRequest(
-//        $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
-//    );
-//    if (gateway.Code == "2000")
-//    {
-//        stream.Status = 1;
-//        stream.ExceptionStatus = gateway.Code;
-//        await UpdateStream(scopeFactory, stream);
-//    }
-//    else
-//    {
-//        stream.Exceptions = gateway.Message;
-//        stream.ExceptionStatus = gateway.Code;
-//        stream.Status = 0;
-//        await UpdateStream(scopeFactory, stream);
-//    }
-//}
-//else
-//{
-//    // push to gateway
-//    var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
-//        $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
-//    );
-//    if (gateway.Code == "2000")
-//    {
-//        stream.Status = 1;
-//        stream.ExceptionStatus = gateway.Code;
-//        await UpdateStream(scopeFactory, stream);
-//    }
-//    else
-//    {
-//        stream.Exceptions = gateway.Message;
-//        stream.ExceptionStatus = gateway.Code;
-//        stream.Status = 0;
-//        await UpdateStream(scopeFactory, stream);
-//    }
-//}

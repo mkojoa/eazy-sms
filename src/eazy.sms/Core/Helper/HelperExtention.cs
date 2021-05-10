@@ -1,4 +1,6 @@
-﻿using System;
+﻿using eazy.sms.Model;
+using Newtonsoft.Json;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -6,6 +8,12 @@ namespace eazy.sms.Core.Helper
 {
     public static class HelperExtention
     {
+
+        public static string ToDynamicJson(object data)
+        {
+            return JsonConvert.SerializeObject(data);
+        }
+
         public static async Task<string> LoadTextFile(string filePath)
         {
             var reader = new StreamReader(filePath);
@@ -45,7 +53,7 @@ namespace eazy.sms.Core.Helper
             }
         }
 
-        private static void Log(string logMessage, TextWriter txtWriter)
+        public static void Log(string logMessage, TextWriter txtWriter)
         {
             try
             {
@@ -60,6 +68,21 @@ namespace eazy.sms.Core.Helper
             {
                 // ignored
             }
+        }
+
+        public static bool IsNullAttachmentWithGroup(Attachment attachments, string[] group)
+        {
+            return (group == null || attachments == null);
+        }
+
+        public static bool IsNullGroupWithMessage(string[] group, string messageId)
+        {
+            return (group == null || messageId == null);
+        }
+
+        public static bool IsNullAttachment(Attachment attachments)
+        {
+            return attachments == null;
         }
     }
 }
