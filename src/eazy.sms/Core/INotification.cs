@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 
 namespace eazy.sms.Core
 {
     public interface INotification
     {
-        Task NotifyAsync<T>(Notifiable<T> notifiable);
+        Task<ResponseDto> NotifyAsync<T>(Notifiable<T> notifiable);
 
-        Task NotifyAsync(
+        Task<ResponseDto> NotifyAsync(
             string message,
             string title,
             string[] recipient,

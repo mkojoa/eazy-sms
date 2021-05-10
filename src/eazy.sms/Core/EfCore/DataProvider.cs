@@ -18,8 +18,7 @@ namespace eazy.sms.Core.EfCore
 
         public void Commit()
         {
-            var testVar = _context.SaveChanges() >= 0;
-            //return (_context.SaveChanges() >= 0);
+           var testVar = _context.SaveChanges() >= 0;
         }
 
         public async Task<EventMessage> CreateDataAsync(EventMessage eventMessage)
