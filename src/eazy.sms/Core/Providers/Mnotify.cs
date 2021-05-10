@@ -5,6 +5,7 @@ using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Helper;
+using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,27 +33,9 @@ namespace eazy.sms.Core.Providers
         {
             var to = string.Join(",", recipient.Select(item => "'" + item + "'"));
 
-            //Byte[] b = System.IO.File.ReadAllBytes(@"E:\\Test.jpg");   // You can use your own method over here.         
-            //File(b, "image/jpeg");
-            //var file = File.Open(attachments.File, FileMode.Open, FileAccess.Read);
-            //{
-            //    "flac": ["audio/flac"],
-            // "m3u": ["audio/mpegurl", "text/plain"],
-            // "m3u8": ["audio/mpegurl", "text/plain"],
-            // "m4a": ["audio/mp4"],
-            // "m4b": ["audio/mp4"],
-            // "mp3": ["audio/mpeg"],
-            // "ogg": ["audio/ogg"],
-            // "opus": ["audio/ogg"],
-            // "pls": ["audio/x-scpls", "text/plain"],
-            // "wav": ["audio/wav"],
-            // "aac": ["audio/aac"]
-            //}
-
             var data = new
             {
                 // param
-
                 message = $"{message}",
                 recipient,
                 sender = $"{sender}",
@@ -76,7 +59,7 @@ namespace eazy.sms.Core.Providers
             if (attachments != null)
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<Response>.PostRequest(
+                var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000")
@@ -96,7 +79,7 @@ namespace eazy.sms.Core.Providers
             else
             {
                 // push to gateway
-                var gateway = await ApiCallHelper<Response>.PostRequest(
+                var gateway = await ApiCallHelper<ResponseDto>.PostRequest(
                     $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}", data
                 );
                 if (gateway.Code == "2000")
