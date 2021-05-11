@@ -203,6 +203,8 @@ namespace eazy.sms.Core
         {
             if (_Content != null) return _Content._Content;
 
+            if (_Attachment != null) return _Attachment.File;
+
             if (_TemplatePath != null)
                 return await TemplateRenderer.RenderTemplateToStringAsync(_TemplatePath, _TemplateModel)
                     .ConfigureAwait(false);
