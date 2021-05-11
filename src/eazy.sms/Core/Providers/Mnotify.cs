@@ -106,10 +106,10 @@ namespace eazy.sms.Core.Providers
             var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
-                Message = data.ToString(),
-                Exceptions = "",
-                ExceptionStatus = "",
-                Status = 0
+                Message = HelperExtention.ToDynamicJson(data),
+                ResultMessage = "",
+                ResultStatus = "",
+                SentStatus = 0
             });
             provider.Commit();
 
@@ -125,9 +125,9 @@ namespace eazy.sms.Core.Providers
             {
                 Id = data.Id,
                 Message = data.Message,
-                Exceptions = data.Exceptions,
-                ExceptionStatus = data.ExceptionStatus,
-                Status = data.Status
+                ResultMessage = data.ResultMessage,
+                ResultStatus = data.ResultStatus,
+                SentStatus = data.SentStatus
             });
             provider.Commit();
         }
@@ -136,15 +136,16 @@ namespace eazy.sms.Core.Providers
         {
             if (_campaign.Code == ResultHelper.Ok)
             {
-                stream.Status = 1;
-                stream.ExceptionStatus = _campaign.Code;
+                stream.SentStatus = 1;
+                stream.ResultStatus = _campaign.Code;
+                stream.ResultMessage = _campaign.Message;
                 await UpdateStream(scopeFactory, stream);
             }
             else
             {
-                stream.Exceptions = _campaign.Message;
-                stream.ExceptionStatus = _campaign.Code;
-                stream.Status = 0;
+                stream.ResultMessage = _campaign.Message;
+                stream.ResultStatus = _campaign.Code;
+                stream.SentStatus = 0;
                 await UpdateStream(scopeFactory, stream);
             }
         }

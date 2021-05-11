@@ -19,9 +19,9 @@ namespace eazy.sms.Core.EfCore.Entity
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
                 entity.Property(e => e.Message).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.ExceptionStatus).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.Exceptions).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.Status).HasDefaultValueSql("(0)");
+                entity.Property(e => e.ResultStatus).HasDefaultValueSql("(NULL)");
+                entity.Property(e => e.ResultMessage).HasDefaultValueSql("(NULL)");
+                entity.Property(e => e.SentStatus).HasDefaultValueSql("(0)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
                 entity.Property(x => x.UpdatedAt).HasDefaultValueSql("(getdate())").ValueGeneratedOnAddOrUpdate();
             });

@@ -29,7 +29,7 @@ namespace eazy.sms.Core.EfCore
 
         public async Task<IEnumerable<EventMessage>> FetchDataAsync(int level)
         {
-            return DataContext.EventMessages.Where(rt => rt.Status == level).AsEnumerable();
+            return DataContext.EventMessages.Where(rt => rt.SentStatus == level).AsEnumerable();
         }
 
         public async Task UpdateDataAsync(EventMessage eventMessage)
