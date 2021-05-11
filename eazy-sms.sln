@@ -9,6 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eazy.sms", "src\eazy.sms\ea
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5039CBA2-8546-4084-BA17-24C8DFF7590B}"
 	ProjectSection(SolutionItems) = preProject
+		Contributors.md = Contributors.md
 		README.md = README.md
 	EndProjectSection
 EndProject
@@ -16,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{12B6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easy.sms.test", "samples\easy.sms.test\easy.sms.test.csproj", "{5FC77221-68CA-4042-A1CE-115C723C84C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eazy.sms.ui", "src\eazy.sms.ui\eazy.sms.ui.csproj", "{F4B9DD39-9816-4D26-922A-7F2B4E4B49E0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eazy.sms.ui", "src\eazy.sms.ui\eazy.sms.ui.csproj", "{F4B9DD39-9816-4D26-922A-7F2B4E4B49E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -2,6 +2,7 @@
 using easy.sms.test.Models;
 using easy.sms.test.Notifications;
 using eazy.sms.Core;
+using eazy.sms.Core.Helper;
 using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,9 +31,9 @@ namespace easy.sms.test.Controllers
             return Ok(sms);
         }
 
-
+        [Produces("application/json", Type = typeof(ResponseDto))]
         [HttpPost("SubscribeToNewsLetter")]
-        public async Task<IActionResult> SubscribeToNewsLetter()
+        public async Task<ResponseDto> SubscribeToNewsLetter()
         {
             //Get user from somewhere
             var accountUser = new AccountDto { Username = "Michael" };
@@ -40,7 +41,7 @@ namespace easy.sms.test.Controllers
             //call this after creating user to send email
             var sms = await _notification.NotifyAsync(new NewsLetterCreatedNotifiable(accountUser));
 
-            return Ok(sms);
+            return sms;
         }
 
 

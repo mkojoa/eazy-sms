@@ -134,17 +134,17 @@ namespace eazy.sms.Core.Providers
 
         private async Task InsertOrUpdateRecord(IServiceScopeFactory scopeFactory, EventMessage stream)
         {
-            if (_campaign.Code == ResultHelper.Ok)
+            if (_campaign.code == ResultHelper.Ok)
             {
                 stream.SentStatus = 1;
-                stream.ResultStatus = _campaign.Code;
-                stream.ResultMessage = _campaign.Message;
+                stream.ResultStatus = _campaign.code;
+                stream.ResultMessage = _campaign.message;
                 await UpdateStream(scopeFactory, stream);
             }
             else
             {
-                stream.ResultMessage = _campaign.Message;
-                stream.ResultStatus = _campaign.Code;
+                stream.ResultMessage = _campaign.message;
+                stream.ResultStatus = _campaign.code;
                 stream.SentStatus = 0;
                 await UpdateStream(scopeFactory, stream);
             }
