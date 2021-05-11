@@ -1,7 +1,5 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace eazy.sms.Core.Providers.MnotifyHelpers.Models
 {
@@ -24,7 +22,7 @@ namespace eazy.sms.Core.Providers.MnotifyHelpers.Models
         [JsonProperty("type")] public readonly string Type;
 
         [JsonConstructor]
-        public SummaryDto( 
+        public SummaryDto(
             [JsonProperty("_id")] string id,
             [JsonProperty("type")] string type,
             [JsonProperty("total_sent")] int totalSent,

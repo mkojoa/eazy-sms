@@ -6,7 +6,7 @@ using eazy.sms.Model;
 
 namespace eazy.sms.Core.Helper
 {
-    public class TemplateRenderer
+    public static class TemplateRenderer
     {
         public static async Task<string> RenderTemplateToStringAsync<TModel>(string templateName, TModel model)
         {

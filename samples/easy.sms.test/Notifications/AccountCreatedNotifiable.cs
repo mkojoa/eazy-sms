@@ -27,9 +27,9 @@ namespace easy.sms.test.Notifications
                 )
                 .Content(new Content($"{_AccountDto.Username}, message from big bro"))
                 .Schedule(false, "2021-04-08 06:00")
-                //.Attach(new Attachment {File = "ringtone.mp3"})
-                //.Template("AccountRegistration.txt", _AccountDto)
-                .Channel(SMSChannel.Mnotify);
+                .Attach(new Attachment {File = "ringtone.mp3"})
+                .Template("AccountRegistration.txt", _AccountDto)
+                .Channel(SmsChannel.Mnotify);
         }
     }
 }

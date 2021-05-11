@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eazy.sms.Core.EfCore.Entity
 {
-    public class DataContext : DbContext
+    public sealed class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
             if (!Database.CanConnect()) Database.EnsureCreated();
         }
 
-        public virtual DbSet<EventMessage> EventMessages { get; set; }
+        public static DbSet<EventMessage> EventMessages => null;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -29,8 +29,9 @@ namespace eazy.sms.Core.EfCore.Entity
             OnModelCreatingPartial(modelBuilder);
         }
 
-        private void OnModelCreatingPartial(ModelBuilder modelBuilder)
+        private static void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
+            modelBuilder.Model.AddAnnotation("", "");
         }
 
         public override int SaveChanges()

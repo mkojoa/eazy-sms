@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
@@ -14,7 +13,7 @@ namespace eazy.sms.Core.Providers
     public class Mnotify : INotification
     {
         private readonly IServiceCollection _services;
-        private ResponseDto campaign;
+        private ResponseDto _campaign;
 
         public Mnotify(string apiKey, IServiceCollection services)
         {
@@ -32,9 +31,6 @@ namespace eazy.sms.Core.Providers
         public async Task<ResponseDto> NotifyAsync(string message, string title, string[] recipient, string sender,
             string scheduleDate, bool isSchedule = false, Attachment attachments = null)
         {
-            string[] group = null;// new string[] { "1", "2", "3", "4" };
-            string messageId = null;
-
             //init data object
             var data = new DataDto
             {
@@ -44,7 +40,7 @@ namespace eazy.sms.Core.Providers
                 ScheduleDate = scheduleDate,
                 IsSchedule = isSchedule,
                 File = attachments?.File,
-                Campaign = title,
+                Campaign = title
             };
 
             var scopeFactory = _services
@@ -56,50 +52,49 @@ namespace eazy.sms.Core.Providers
 
             if (!HelperExtention.IsNullAttachment(attachments))
             {
-                campaign = await ApiCallHelper<ResponseDto>.CampaignWithVoice(
-                        $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}",
-                        data
-                    );
+                _campaign = await ApiCallHelper<ResponseDto>.CampaignWithVoice(
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/voice/quick?key={ApiKey}",
+                    data
+                );
                 await InsertOrUpdateRecord(scopeFactory, stream);
 
-                return campaign;
+                return _campaign;
             }
-            else if (!HelperExtention.IsNullGroupWithMessage(group, messageId))
+
+            if (!HelperExtention.IsNullGroupWithMessage(null, null))
             {
-                campaign = await ApiCallHelper<ResponseDto>.CampaignGroup(
-                        $"{Constant.MnotifyGatewayJsonEndpoint}/sms/group?key={ApiKey}",
-                        data
-                    );
-
-                await InsertOrUpdateRecord(scopeFactory, stream);
-
-                return campaign;
-            }
-            else if (!HelperExtention.IsNullAttachmentWithGroup(attachments, group)) 
-            {
-                campaign = await ApiCallHelper<ResponseDto>.CampaignGroupWithVoice(
-                        $"{Constant.MnotifyGatewayJsonEndpoint}/voice/group?key={ApiKey}",
-                        data
-                    );
-
-                await InsertOrUpdateRecord(scopeFactory, stream);
-
-                return campaign;
-            }
-            else
-            {
-                campaign = await ApiCallHelper<ResponseDto>.Campaign(
-                    $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}",
+                _campaign = await ApiCallHelper<ResponseDto>.CampaignGroup(
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/sms/group?key={ApiKey}",
                     data
                 );
 
                 await InsertOrUpdateRecord(scopeFactory, stream);
 
-                return campaign;
+                return _campaign;
             }
+
+            if (!HelperExtention.IsNullAttachmentWithGroup(attachments, null))
+            {
+                _campaign = await ApiCallHelper<ResponseDto>.CampaignGroupWithVoice(
+                    $"{Constant.MnotifyGatewayJsonEndpoint}/voice/group?key={ApiKey}",
+                    data
+                );
+
+                await InsertOrUpdateRecord(scopeFactory, stream);
+
+                return _campaign;
+            }
+
+            _campaign = await ApiCallHelper<ResponseDto>.Campaign(
+                $"{Constant.MnotifyGatewayJsonEndpoint}/sms/quick?key={ApiKey}",
+                data
+            );
+
+            await InsertOrUpdateRecord(scopeFactory, stream);
+
+            return _campaign;
         }
 
-        
 
         //=========================================
         //===========  Helper Methods  ============
@@ -108,7 +103,7 @@ namespace eazy.sms.Core.Providers
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
                 Message = data.ToString(),
@@ -125,7 +120,7 @@ namespace eazy.sms.Core.Providers
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
-            var provider = (IDataProvider)serviceProvider.GetService(typeof(IDataProvider));
+            var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             await provider.UpdateDataAsync(new EventMessage
             {
                 Id = data.Id,
@@ -139,16 +134,16 @@ namespace eazy.sms.Core.Providers
 
         private async Task InsertOrUpdateRecord(IServiceScopeFactory scopeFactory, EventMessage stream)
         {
-            if (campaign.Code == ResultHelper.Ok)
+            if (_campaign.Code == ResultHelper.Ok)
             {
                 stream.Status = 1;
-                stream.ExceptionStatus = campaign.Code;
+                stream.ExceptionStatus = _campaign.Code;
                 await UpdateStream(scopeFactory, stream);
             }
             else
             {
-                stream.Exceptions = campaign.Message;
-                stream.ExceptionStatus = campaign.Code;
+                stream.Exceptions = _campaign.Message;
+                stream.ExceptionStatus = _campaign.Code;
                 stream.Status = 0;
                 await UpdateStream(scopeFactory, stream);
             }

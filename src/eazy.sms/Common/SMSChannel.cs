@@ -3,7 +3,7 @@
     /// <summary>
     ///     Get the notification's delivery channels.
     /// </summary>
-    public enum SMSChannel
+    public enum SmsChannel
     {
         ///// <summary>
         /////     Messages will be sent using hubtel gateway

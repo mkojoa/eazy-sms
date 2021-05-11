@@ -5,7 +5,7 @@ namespace eazy.sms.Model
     /// <summary>
     ///     A destination mobile number.
     /// </summary>
-    public class SMSRecipient
+    public class SmsRecipient
     {
         /// <summary>
         ///     This value should be in international format.

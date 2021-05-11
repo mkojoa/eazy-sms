@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using eazy.sms.Common;
 using eazy.sms.Core.Exceptions;
 using eazy.sms.Core.Helper;
@@ -36,7 +37,7 @@ namespace eazy.sms.Core
             PropertyName = "allowedChannels",
             ItemConverterType = typeof(StringEnumConverter)
         )]
-        private SMSChannel _SmsChannel { get; set; }
+        private SmsChannel _SmsChannel { get; set; }
 
         /// <summary>
         ///     Template data to pass to the Txt view to render.
@@ -115,21 +116,18 @@ namespace eazy.sms.Core
         public Notifiable<T> Schedule(bool isSchedule = false, string scheduleDate = null)
         {
             _IsSchedule = isSchedule;
-            if (!_IsSchedule)
-                _ScheduleDate = "";
-            else
-                _ScheduleDate = scheduleDate;
+            _ScheduleDate = !_IsSchedule ? "" : scheduleDate;
 
             return this;
         }
 
         /// <summary>
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="content"></param>
         /// <returns></returns>
         public Notifiable<T> Content(Content content)
         {
-            _Content = content;
+            _Content = content ?? throw new ArgumentNullException(nameof(content));
             return this;
         }
 
@@ -138,7 +136,7 @@ namespace eazy.sms.Core
         /// </summary>
         /// <param name="channel"></param>
         /// <returns></returns>
-        public Notifiable<T> Channel(SMSChannel channel)
+        public Notifiable<T> Channel(SmsChannel channel)
         {
             _SmsChannel = channel;
             return this;
@@ -177,7 +175,7 @@ namespace eazy.sms.Core
             var attach = await BuildAttach()
                 .ConfigureAwait(false);
 
-           return await notification.NotifyAsync(
+            return await notification.NotifyAsync(
                 msg,
                 _Subject,
                 _SmsRecipients,

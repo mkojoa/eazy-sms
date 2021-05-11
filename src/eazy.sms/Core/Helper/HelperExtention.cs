@@ -1,14 +1,13 @@
-﻿using eazy.sms.Model;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using eazy.sms.Model;
+using Newtonsoft.Json;
 
 namespace eazy.sms.Core.Helper
 {
     public static class HelperExtention
     {
-
         public static string ToDynamicJson(object data)
         {
             return JsonConvert.SerializeObject(data);
@@ -72,12 +71,12 @@ namespace eazy.sms.Core.Helper
 
         public static bool IsNullAttachmentWithGroup(Attachment attachments, string[] group)
         {
-            return (group == null || attachments == null);
+            return group == null || attachments == null;
         }
 
         public static bool IsNullGroupWithMessage(string[] group, string messageId)
         {
-            return (group == null || messageId == null);
+            return group == null || messageId == null;
         }
 
         public static bool IsNullAttachment(Attachment attachments)

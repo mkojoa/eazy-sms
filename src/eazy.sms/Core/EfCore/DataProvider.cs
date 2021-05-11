@@ -18,23 +18,23 @@ namespace eazy.sms.Core.EfCore
 
         public void Commit()
         {
-           var testVar = _context.SaveChanges() >= 0;
+            var b = _context.SaveChanges() >= 0;
         }
 
         public async Task<EventMessage> CreateDataAsync(EventMessage eventMessage)
         {
-            await _context.EventMessages.AddAsync(eventMessage);
+            await DataContext.EventMessages.AddAsync(eventMessage);
             return eventMessage;
         }
 
         public async Task<IEnumerable<EventMessage>> FetchDataAsync(int level)
         {
-            return _context.EventMessages.Where(rt => rt.Status == level).AsEnumerable();
+            return DataContext.EventMessages.Where(rt => rt.Status == level).AsEnumerable();
         }
 
         public async Task UpdateDataAsync(EventMessage eventMessage)
         {
-            _context.EventMessages.Update(eventMessage);
+            DataContext.EventMessages.Update(eventMessage);
         }
     }
 }

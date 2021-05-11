@@ -12,7 +12,7 @@ namespace eazy.sms
     public static class Extension
     {
         //static IServiceProvider serviceProvider;
-        public static IServiceCollection AddEazySms(this IServiceCollection services, IConfiguration configuration)
+        public static void AddEazySms(this IServiceCollection services, IConfiguration configuration)
         {
             EfCoreIoC(services, configuration);
 
@@ -30,16 +30,12 @@ namespace eazy.sms
 
             services.AddSingleton(mnotify);
             //services.AddSingleton(hubtel);
-
-            return services;
         }
 
 
-        public static IApplicationBuilder UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
+        public static void UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
         {
             configuration.GetSection("");
-
-            return app;
         }
 
         private static void EfCoreIoC(IServiceCollection services, IConfiguration configuration)
