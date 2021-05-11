@@ -18,8 +18,8 @@ namespace easy.sms.test.Controllers
             _notification = notification;
         }
 
-        [HttpPost("Register")]
-        public async Task<IActionResult> Register()
+        [HttpPost("AccountRegistration")]
+        public async Task<IActionResult> AccountRegistration()
         {
             //Create new user
             var accountUser = new AccountDto { Username = "Michael Ameyaw" };
@@ -29,5 +29,44 @@ namespace easy.sms.test.Controllers
 
             return Ok(sms);
         }
+
+
+        [HttpPost("SubscribeToNewsLetter")]
+        public async Task<IActionResult> SubscribeToNewsLetter()
+        {
+            //Get user from somewhere
+            var accountUser = new AccountDto { Username = "Michael" };
+
+            //call this after creating user to send email
+            var sms = await _notification.NotifyAsync(new NewsLetterCreatedNotifiable(accountUser));
+
+            return Ok(sms);
+        }
+
+
+        [HttpPost("SubscribeWithVoiceCall")]
+        public async Task<IActionResult> SubscribeWithVoiceCall()
+        {
+
+            //call this after creating user to send email
+            var sms = await _notification.NotifyAsync(new VoiceCallCreatedNotifiable());
+
+            return Ok(sms);
+        }
+
+
+        [HttpPost("UnSubscribeToNewsLetter")]
+        public async Task<IActionResult> UnSubscribeToNewsLetter()
+        {
+            //Get user from somewhere
+            var accountUser = new AccountDto { Username = "Michael" };
+
+
+            //call this after creating user to send email
+            var sms = await _notification.NotifyAsync(new UnsubscribeCreatedNotifiable(accountUser));
+
+            return Ok(sms);
+        }
+
     }
 }

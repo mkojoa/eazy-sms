@@ -1,0 +1,2 @@
+﻿Thank you {{Username}}, for signing up for our text newsletter. 
+You’ll get a digestible and informative overview of all the most important startup and VC funding news.
