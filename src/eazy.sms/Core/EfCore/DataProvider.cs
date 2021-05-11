@@ -23,7 +23,7 @@ namespace eazy.sms.Core.EfCore
 
         public async Task<EventMessage> CreateDataAsync(EventMessage eventMessage)
         {
-            await DataContext.EventMessages.AddAsync(eventMessage);
+            await _context.AddAsync(eventMessage);
             return eventMessage;
         }
 
@@ -34,7 +34,7 @@ namespace eazy.sms.Core.EfCore
 
         public async Task UpdateDataAsync(EventMessage eventMessage)
         {
-            DataContext.EventMessages.Update(eventMessage);
+            _context.Update(eventMessage);
         }
     }
 }

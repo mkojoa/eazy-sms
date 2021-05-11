@@ -18,16 +18,16 @@ namespace easy.sms.test.Controllers
             _notification = notification;
         }
 
-        [HttpGet("Register")]
-        public async Task<ResponseDto> Register()
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register()
         {
             //Create new user
-            var accountUser = new AccountDto {Username = "Michael Ameyaw"};
+            var accountUser = new AccountDto { Username = "Michael Ameyaw" };
 
             //call this after creating user to send email
             var sms = await _notification.NotifyAsync(new AccountCreatedNotifiable(accountUser));
 
-            return sms;
+            return Ok(sms);
         }
     }
 }

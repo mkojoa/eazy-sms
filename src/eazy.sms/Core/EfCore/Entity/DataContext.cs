@@ -31,7 +31,6 @@ namespace eazy.sms.Core.EfCore.Entity
 
         private static void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
-            modelBuilder.Model.AddAnnotation("", "");
         }
 
         public override int SaveChanges()

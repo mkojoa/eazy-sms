@@ -99,7 +99,7 @@ namespace eazy.sms.Core.Providers
         //=========================================
         //===========  Helper Methods  ============
         //=========================================
-        private static async Task<EventMessage> CreateStream(IServiceScopeFactory scopeFactory, object data)
+        private static async Task<EventMessage> CreateStream(IServiceScopeFactory scopeFactory, DataDto data)
         {
             using var scope = scopeFactory.CreateScope();
             var serviceProvider = scope.ServiceProvider;
