@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\eazy.sms.ui\eazy.sms.ui.csproj" />
     <ProjectReference Include="..\..\src\eazy.sms\eazy.sms.csproj" />
   </ItemGroup>
 

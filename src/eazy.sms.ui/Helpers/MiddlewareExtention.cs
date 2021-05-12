@@ -7,8 +7,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -27,6 +30,7 @@ namespace eazy.sms.ui.Helpers
         private readonly IContentTypeProvider _contentTypeProvider;
         private readonly IWebHostEnvironment _hostingEnv;
         private readonly StaticFileMiddleware _staticFileMiddleware;
+        private readonly JsonSerializerSettings _jsonSerializerOptions;
 
         /// <summary>
         /// Creates a new instance of the StaticFileMiddleware.
@@ -74,13 +78,20 @@ namespace eazy.sms.ui.Helpers
             _logger = loggerFactory.CreateLogger<StaticFileMiddleware>();
             _staticFileMiddleware = CreateStaticFileMiddleware(next, hostingEnv, loggerFactory);
             _configuration = configuration;
+            _jsonSerializerOptions = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.None
+            };
         }
 
         private StaticFileMiddleware CreateStaticFileMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory)
         {
+            var t = $"/{_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}";
             var staticFileOptions = new StaticFileOptions
             {
-                RequestPath = $"/{_configuration.GetValue("EazyOptions:SMS:UI:RoutePrefix", "easy-sms")}",
+                RequestPath = $"/{_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}",
                 FileProvider = new EmbeddedFileProvider(typeof(MiddlewareExtention).GetTypeInfo().Assembly,
                     EmbeddedFileNamespace)
             };
@@ -100,20 +111,22 @@ namespace eazy.sms.ui.Helpers
             var path = httpContext.Request.Path.Value;
 
             // If the RoutePrefix is requested (with or without trailing slash), redirect to index URL
-            if (httpMethod == "GET" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetValue("EazyOptions:SMS:UI:RoutePrefix", "easy-sms"))}/api/logs/?$",
+            if (httpMethod == "GET" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/api/sms/?$",
                 RegexOptions.IgnoreCase))
             { 
+                //get api data
             }
 
             if (httpMethod == "GET" &&
-                Regex.IsMatch(path, $"^/?{Regex.Escape(_configuration.GetValue("EazyOptions:SMS:UI:RoutePrefix", "easy-sms"))}/?$", RegexOptions.IgnoreCase))
+                Regex.IsMatch(path, $"^/?{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/?$", RegexOptions.IgnoreCase))
             {
+                // load html pages
                 var indexUrl = httpContext.Request.GetEncodedUrl().TrimEnd('/') + "/index.html";
                 RespondWithRedirect(httpContext.Response, indexUrl);
                 return;
             }
 
-            if (httpMethod == "GET" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetValue("EazyOptions:SMS:UI:RoutePrefix", "easy-sms"))}/?index.html$",
+            if (httpMethod == "GET" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/?index.html$",
                 RegexOptions.IgnoreCase))
             {
                 await RespondWithIndexHtml(httpContext.Response);
@@ -123,14 +136,29 @@ namespace eazy.sms.ui.Helpers
             await _staticFileMiddleware.Invoke(httpContext);
         }
 
-        private Task RespondWithIndexHtml(HttpResponse response)
+        private async Task RespondWithIndexHtml(HttpResponse response)
         {
-            throw new NotImplementedException();
+            var RoutePrefix  = _configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value;
+            var AuthType = "";
+
+            response.StatusCode = 200;
+            response.ContentType = "text/html;charset=utf-8";
+
+            await using var stream = IndexStream();
+            var htmlBuilder = new StringBuilder(await new StreamReader(stream).ReadToEndAsync());
+            htmlBuilder.Replace("%(Configs)", JsonConvert.SerializeObject(
+                new { RoutePrefix, AuthType }, _jsonSerializerOptions));
+
+            await response.WriteAsync(htmlBuilder.ToString(), Encoding.UTF8);
         }
 
         private void RespondWithRedirect(HttpResponse response, string indexUrl)
         {
-            throw new NotImplementedException();
+            response.StatusCode = 301;
+            response.Headers["Location"] = indexUrl;
         }
+
+        private Func<Stream> IndexStream { get; } =
+            () => Assembly.GetExecutingAssembly().GetManifestResourceStream("eazy.sms.ui.wwwroot.index.html");
     }
 }
