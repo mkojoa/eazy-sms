@@ -47,6 +47,25 @@ namespace eazy.sms.ui.Helpers
             IConfiguration configuration
             )
         {
+            CheckContructorParam(next, hostingEnv, options, loggerFactory, configuration);
+
+            _next = next;
+            _options = options.Value;
+            _configuration = configuration;
+            _contentTypeProvider = options.Value.ContentTypeProvider ?? new FileExtensionContentTypeProvider();
+            _matchUrl = _options.RequestPath;
+            _logger = loggerFactory.CreateLogger<StaticFileMiddleware>();
+            _staticFileMiddleware = CreateStaticFileMiddleware(next, hostingEnv, loggerFactory, configuration);
+            _jsonSerializerOptions = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                Formatting = Formatting.None
+            };
+        }
+
+        private static void CheckContructorParam(RequestDelegate next, IWebHostEnvironment hostingEnv, IOptions<StaticFileOptions> options, ILoggerFactory loggerFactory, IConfiguration configuration)
+        {
             if (configuration == null)
             {
                 throw new ArgumentNullException(nameof(next));
@@ -70,28 +89,14 @@ namespace eazy.sms.ui.Helpers
             {
                 throw new ArgumentNullException(nameof(loggerFactory));
             }
-
-            _next = next;
-            _options = options.Value;
-            _contentTypeProvider = options.Value.ContentTypeProvider ?? new FileExtensionContentTypeProvider();
-            _matchUrl = _options.RequestPath;
-            _logger = loggerFactory.CreateLogger<StaticFileMiddleware>();
-            _staticFileMiddleware = CreateStaticFileMiddleware(next, hostingEnv, loggerFactory);
-            _configuration = configuration;
-            _jsonSerializerOptions = new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore,
-                ContractResolver = new CamelCasePropertyNamesContractResolver(),
-                Formatting = Formatting.None
-            };
         }
 
-        private StaticFileMiddleware CreateStaticFileMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory)
+        private StaticFileMiddleware CreateStaticFileMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
-            var t = $"/{_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}";
+            var RequestPath = $"/{configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}"; 
             var staticFileOptions = new StaticFileOptions
             {
-                RequestPath = $"/{_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}",
+                RequestPath = RequestPath,
                 FileProvider = new EmbeddedFileProvider(typeof(MiddlewareExtention).GetTypeInfo().Assembly,
                     EmbeddedFileNamespace)
             };
@@ -120,7 +125,7 @@ namespace eazy.sms.ui.Helpers
             if (httpMethod == "GET" &&
                 Regex.IsMatch(path, $"^/?{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/?$", RegexOptions.IgnoreCase))
             {
-                // load html pages
+                // load html pages based on routePrefix
                 var indexUrl = httpContext.Request.GetEncodedUrl().TrimEnd('/') + "/index.html";
                 RespondWithRedirect(httpContext.Response, indexUrl);
                 return;
