@@ -1,14 +1,44 @@
 [
   {
-    "outputFileName": "wwwroot/css/main.min.css",
+    "outputFileName": "wwwroot/css/style.css",
     "inputFiles": [
-      "wwwroot/css/main.css"
+      "wwwroot/css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/icon.css",
+    "inputFiles": [
+      "wwwroot/css/icon.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/sidebar.css",
+    "inputFiles": [
+      "wwwroot/css/sidebar.css"
     ]
   },
   {
     "outputFileName": "wwwroot/js/main.min.js",
     "inputFiles": [
       "wwwroot/js/main.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/plugins/main.min.js",
+    "inputFiles": [
+      "wwwroot/plugins/main.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/plugins/simple-line-icons/simple-line-icons.css",
+    "inputFiles": [
+      "wwwroot/plugins/simple-line-icons/simple-line-icons.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/dist/main.min.css",
+    "inputFiles": [
+      "wwwroot/dist/main.css"
     ]
   }
 ]

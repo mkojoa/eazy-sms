@@ -1,18 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="wwwroot\index.html" />
+    <EmbeddedResource Include="wwwroot/index.html" />
+    <EmbeddedResource Include="wwwroot/dist/**/*" />
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="wwwroot\index.html" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
     <PackageReference Include="Dapper" Version="2.0.78" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.2.7" />
@@ -31,7 +29,6 @@
   <ItemGroup>
     <Folder Include="wwwroot\dist\css\" />
     <Folder Include="wwwroot\dist\js\" />
-    <Folder Include="wwwroot\dist\images\" />
   </ItemGroup>
 
 </Project>

@@ -24,11 +24,8 @@ namespace eazy.sms.ui.Helpers
         private const string EmbeddedFileNamespace = "eazy.sms.ui.wwwroot.dist";
         private readonly IConfiguration _configuration;
         private readonly StaticFileOptions _options;
-        private readonly PathString _matchUrl;
         private readonly RequestDelegate _next;
         private readonly ILogger _logger;
-        private readonly IContentTypeProvider _contentTypeProvider;
-        private readonly IWebHostEnvironment _hostingEnv;
         private readonly StaticFileMiddleware _staticFileMiddleware;
         private readonly JsonSerializerSettings _jsonSerializerOptions;
 
@@ -52,8 +49,6 @@ namespace eazy.sms.ui.Helpers
             _next = next;
             _options = options.Value;
             _configuration = configuration;
-            _contentTypeProvider = options.Value.ContentTypeProvider ?? new FileExtensionContentTypeProvider();
-            _matchUrl = _options.RequestPath;
             _logger = loggerFactory.CreateLogger<StaticFileMiddleware>();
             _staticFileMiddleware = CreateStaticFileMiddleware(next, hostingEnv, loggerFactory, configuration);
             _jsonSerializerOptions = new JsonSerializerSettings

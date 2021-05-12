@@ -34,9 +34,9 @@ namespace eazy.sms
         }
 
 
-        public static void UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
+        public static IApplicationBuilder UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
         {
-            app.UseEazySmsUi(configuration);
+           return app.UseEazySmsUi(configuration);
         }
 
         private static void EfCoreIoC(IServiceCollection services, IConfiguration configuration)
