@@ -1,0 +1,15 @@
+/* Write your custom CSS here */
+
+.page-content {
+    min-height: 56px;
+    vertical-align: bottom;
+    background: #eee;
+    width: calc(100% - 61px);
+    float: right;
+    margin-left: 61px;
+}
+
+.page-sidebar-fixed .page-header {
+    z-index: 41;
+    background-color: #fff;
+}

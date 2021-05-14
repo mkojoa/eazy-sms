@@ -8,18 +8,6 @@
     <EmbeddedResource Include="wwwroot/index.html" />
     <EmbeddedResource Include="wwwroot/dist/**/*" />
   </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="wwwroot\dist\css\fonts\Simple-Line-Icons.eot" />
-    <None Remove="wwwroot\dist\css\fonts\Simple-Line-Icons.svg" />
-    <None Remove="wwwroot\dist\css\fonts\Simple-Line-Icons.ttf" />
-    <None Remove="wwwroot\dist\css\fonts\Simple-Line-Icons.woff" />
-    <None Remove="wwwroot\dist\css\fonts\Simple-Line-Icons.woff2" />
-    <None Remove="wwwroot\dist\css\simple-line-icons.css" />
-    <None Remove="wwwroot\dist\js\sidebar-custom.js" />
-    <None Remove="wwwroot\dist\js\sidebar-rtl.js" />
-    <None Remove="wwwroot\dist\js\sidebar.js" />
-  </ItemGroup>
   
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
@@ -39,11 +27,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Folder Include="wwwroot\dist\plugins\bootstrap\js\" />
-    <Folder Include="wwwroot\dist\plugins\ionicons\css\" />
-    <Folder Include="wwwroot\dist\plugins\ionicons\fonts\" />
-    <Folder Include="wwwroot\dist\plugins\jquery\" />
-    <Folder Include="wwwroot\dist\plugins\line-awesome\css\" />
+    <Folder Include="wwwroot\dist\css\bootstrap\css\" />
+    <Folder Include="wwwroot\dist\css\bootstrap\js\" />
   </ItemGroup>
 
 </Project>

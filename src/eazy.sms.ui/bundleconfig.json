@@ -1,3 +1,15 @@
 [
-  
+  {
+    "outputFileName": "wwwroot/css/pagekit.min.css",
+    "inputFiles": [
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/css/pagekit.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.css",
+    "inputFiles": [
+      "wwwroot/js/pagekit.min.js"
+    ]
+  }
 ]
