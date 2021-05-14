@@ -13,3 +13,18 @@
     z-index: 41;
     background-color: #fff;
 }
+
+.pagination li.active a {
+    color: #fff !important;
+    background: #448ceb !important;
+    border-color: #448ceb !important;
+}
+
+.pagination li a {
+    color: #448ceb;
+    -webkit-transition: all .2s ease-in-out;
+    -moz-transition: all .2s ease-in-out;
+    -o-transition: all .2s ease-in-out;
+    transition: all .2s ease-in-out;
+    border-color: #edf2f5;
+}
