@@ -34,30 +34,9 @@
         <!-- Page Sidebar -->
         <div class="page-sidebar">
             <div class="profile-menu">
-                <a href="app-profile.html">
+                <a href="#">
                     <img src="./images/avatars/avatar1.png" alt="">
                 </a>
-            </div>
-            <div class="page-sidebar-inner">
-                <div class="page-sidebar-menu">
-                    <ul>
-                        <li>
-                            <a href="#" data-toggle="tooltip" data-placement="right" title="Dashboard"><i class="fas fa-rocket"></i></a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="tooltip" data-placement="right" title="News"><i class="fas fa-globe-africa"></i></a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="tooltip" data-placement="right" title="Inbox"><i class="fas fa-inbox"></i></a>
-                        </li>
-                        <li>
-                            <a href="#" data-toggle="tooltip" data-placement="right" title="Chat"><i class="far fa-comments"></i></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="settings-menu-btn">
-                <a href="#" class="settings-menu-link"><i class="fas fa-wrench"></i></a>
             </div>
         </div><!-- /Page Sidebar -->
 
@@ -76,22 +55,21 @@
                         </li>
                         <li>
                             <a href="javascript:void(0)">
-                                <i class="menu-icon icon-apps"></i><span>Apps</span><i class="accordion-icon fas fa-angle-left"></i>
+                                <i class="menu-icon icon-apps"></i><span>SMS Stats</span><i class="accordion-icon fas fa-angle-left"></i>
                             </a>
                             <ul class="sub-menu">
-                                <li><a href="#app-mailbox.html">Mailbox</a></li>
+                                <li><a href="#app-mailbox.html">History</a></li>
                             </ul>
                         </li>
                         <li>
                             <a href="javascript:void(0)">
-                                <i class="menu-icon icon-layers"></i><span>Layouts</span><i class="accordion-icon fas fa-angle-left"></i>
+                                <i class="menu-icon icon-layers"></i><span>Template</span><i class="accordion-icon fas fa-angle-left"></i>
                             </a>
                             <ul class="sub-menu">
-                                <li><a href="javascript:void(0)">Blank Page</a></li>
-                                <li><a href="javascript:void(0)">Collapsed Sidebar</a></li>
+                                <li><a href="javascript:void(0)">Default Template</a></li>
                             </ul>
                         </li>
-                        <li>
+                        <!--<li>
                             <a href="javascript:void(0)">
                                 <i class="menu-icon icon-brush"></i><span>Styles</span><i class="accordion-icon fas fa-angle-left"></i>
                             </a>
@@ -127,7 +105,7 @@
                             <ul class="sub-menu">
                                 <li><a href="javascript:void(0)">Invoice</a></li>
                             </ul>
-                        </li>
+                        </li>-->
                         <li class="menu-divider"></li>
                         <li>
                             <a href="#">
@@ -146,7 +124,7 @@
                         <div class="navbar-header">
                             <div class="logo-sm">
                                 <a href="javascript:void(0)" id="sidebar-toggle-button"><i class="fas fa-bars"></i></a>
-                                <a class="logo-box" href="index.html"><span>pagekit</span></a>
+                                <a class="logo-box" href="index.html"><span>eazy-sms</span></a>
                             </div>
                             <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                                 <i class="fas fa-angle-down"></i>
@@ -159,11 +137,9 @@
                             <ul class="nav navbar-nav mr-auto">
                                 <li class="collapsed-sidebar-toggle-inv"><a href="javascript:void(0)" id="collapsed-sidebar-toggle-button"><i class="fas fa-bars"></i></a></li>
                                 <li><a href="javascript:void(0)" id="toggle-fullscreen"><i class="fas fa-expand"></i></a></li>
-                                <li><a href="javascript:void(0)" id="search-button"><i class="fas fa-search"></i></a></li>
                             </ul>
                         </div><!-- /.navbar-collapse -->
                         <ul class="nav navbar-nav">
-                            <li class="nav-item d-md-block"><a href="javascript:void(0)" class="right-sidebar-toggle" data-sidebar-id="main-right-sidebar"><i class="fas fa-envelope"></i></a></li>
                             <li class="dropdown nav-item d-md-block">
                                 <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-bell"></i></a>
                                 <ul class="dropdown-menu dropdown-menu-right dropdown-lg dropdown-content">
@@ -179,24 +155,6 @@
                                                     </span>
                                                 </a>
                                             </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="notification-badge bg-danger"><i class="fas fa-bolt"></i></span>
-                                                    <span class="notification-info">
-                                                        <span class="notification-info">4 new special offers from the apps you follow!</span>
-                                                        <small class="notification-date">Yesterday</small>
-                                                    </span>
-                                                </a>
-                                            </li>
-                                            <li>
-                                                <a href="#">
-                                                    <span class="notification-badge bg-success"><i class="fas fa-bullhorn"></i></span>
-                                                    <span class="notification-info">
-                                                        <span class="notification-info">There is a meeting with <b>Ethan</b> in 15 minutes!</span>
-                                                        <small class="notification-date">Yesterday</small>
-                                                    </span>
-                                                </a>
-                                            </li>
                                         </ul>
                                     </li>
                                 </ul>
@@ -204,11 +162,6 @@
                             <li class="dropdown nav-item d-md-block">
                                 <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="./images/avatars/avatar1.png" alt="" class="rounded-circle"></a>
                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <li><a href="#">Profile</a></li>
-                                    <li><a href="#">Calendar</a></li>
-                                    <li><a href="#"><span class="badge float-right badge-info">64</span>Messages</a></li>
-                                    <li role="separator" class="divider"></li>
-                                    <li><a href="#">Account Settings</a></li>
                                     <li><a href="#">Log Out</a></li>
                                 </ul>
                             </li>
@@ -229,11 +182,46 @@
                         <h1 class="page-title">Dashboard</h1>
                     </div>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-8">
                             <div class="card">
                                 <div class="card-body">
                                     <h5 class="card-title">SMS Monthly</h5>
                                     <div id="apex1"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">SMS Activity</h5>
+                                    <div class="user-activity">
+                                        <ul class="list-unstyled">
+                                            <li>
+                                                <div>
+                                                    <span class="notification-badge bg-danger"><b>B</b></span>
+                                                    <span class="notification-info">
+                                                        <span class="notification-info"><b>Bob</b> sent you a friend request on Facebook</span>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div>
+                                                    <span class="notification-badge bg-success"><b>N</b></span>
+                                                    <span class="notification-info">
+                                                        <span class="notification-info"><b>Noah</b> sent you 9 new messages today</span>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div>
+                                                    <span class="notification-badge bg-info"><b>T</b></span>
+                                                    <span class="notification-info">
+                                                        <span class="notification-info">There is a meeting with <b>Ethan</b> in 15 minutes!</span>
+                                                    </span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -293,20 +281,52 @@
                                 <div class="card-body">
                                     <h5 class="card-title">SMS List</h5>
                                     <div class="table-responsive">
-                                        <div class="todo-list">
-                                            <ul class="list-unstyled">
-                                                <li>
-                                                    <a href="#" class="custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="task1">
-                                                        <label class="custom-control-label" for="task1"></label>
-                                                        <span> SMS body here </span>
-                                                        <span>  created. </span>
-                                                        <i class="fas fa-8x fa-trash fa-pull-right"></i>
-                                                        <i class="fas fa-8x fa-eye fa-pull-right"></i>
-                                                    </a>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">#</th>
+                                                    <th scope="col">Subject</th>
+                                                    <th scope="col">Message</th>
+                                                    <th scope="col">Date</th>
+                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th scope="row">07809</th>
+                                                    <td>Alpha - Angular 8</td>
+                                                    <td>This is ...</td>
+                                                    <td>Dec 15, 2019</td>
+                                                    <td><span class="badge badge-success">Sent</span></td>
+                                                    <td>
+                                                        <span class="btn btn-outline-info btn-sm">
+                                                            <i class="fa fa-eye" title="view message details"></i>
+                                                        </span> &nbsp;
+                                                        <span class="btn btn-outline-success btn-sm">
+                                                            <i class="fa fa-redo" title="resend failed message"></i>
+                                                        </span>
+                                                        
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">09415</th>
+                                                    <td>CRM Application</td>
+                                                    <td>Gurpreet Holder</td>
+                                                    <td>Jul 8, 2019</td>
+                                                    <td><span class="badge badge-danger">Failed</span></td>
+                                                    <td>
+                                                        <span class="btn btn-outline-info btn-sm">
+                                                            <i class="fa fa-eye" title="view message details"></i>
+                                                        </span> &nbsp;
+                                                        <span class="btn btn-outline-success btn-sm">
+                                                            <i class="fa fa-redo" title="resend failed message"></i>
+                                                        </span>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                     <div class="card-body">
                                         <nav aria-label="Page navigation example">
@@ -332,71 +352,6 @@
             </div>
             <!-- /Page Inner -->
 
-            <div class="page-right-sidebar" id="main-right-sidebar">
-                <div class="page-right-sidebar-inner">
-                    <div class="right-sidebar-top">
-                        <span class="chat-header">Chat</span>
-                        <a href="javascript:void(0)" class="right-sidebar-toggle right-sidebar-close" data-sidebar-id="main-right-sidebar"><i class="icon-close"></i></a>
-                    </div>
-                    <div class="right-sidebar-content">
-                        <!-- Tab panes -->
-                        <div class="chat-list">
-                            <span class="chat-title">Recent</span>
-                            <a href="javascript:void(0);" class="right-sidebar-toggle chat-item unread" data-sidebar-id="chat-right-sidebar">
-                                <div class="user-avatar">
-                                    <img src="./images/avatars/avatar1.png" alt="">
-                                </div>
-                                <div class="chat-info">
-                                    <span class="chat-author">David</span>
-                                    <span class="chat-text">Hello there!</span>
-                                    <span class="chat-time">16:20</span>
-                                </div>
-                            </a>
-                            <a href="javascript:void(0);" class="right-sidebar-toggle chat-item unread active-user" data-sidebar-id="chat-right-sidebar">
-                                <div class="user-avatar">
-                                    <img src="./images/avatars/avatar2.png" alt="">
-                                </div>
-                                <div class="chat-info">
-                                    <span class="chat-author">Bob</span>
-                                    <span class="chat-text">Hello there!</span>
-                                    <span class="chat-time">11:34</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="page-right-sidebar" id="chat-right-sidebar">
-                <div class="page-right-sidebar-inner">
-                    <div class="right-sidebar-top">
-                        <div class="chat-top-info">
-                            <span class="chat-name">Noah</span>
-                            <span class="chat-state">2h ago</span>
-                        </div>
-                        <a href="javascript:void(0)" class="right-sidebar-toggle chat-sidebar-close float-right" data-sidebar-id="chat-right-sidebar"><i class="icon-keyboard_arrow_right"></i></a>
-                    </div>
-                    <div class="right-sidebar-content">
-                        <div class="right-sidebar-chat slimscroll">
-                            <div class="chat-bubbles">
-                                <div class="chat-start-date">02/06/2017 5:58PM</div>
-                                <div class="chat-bubble them">
-                                    <div class="chat-bubble-img-container">
-                                        <img src="./images/avatars/avatar1.png" alt="">
-                                    </div>
-                                    <div class="chat-bubble-text-container">
-                                        <span class="chat-bubble-text">Hello</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="chat-write">
-                            <form class="form-horizontal" action="javascript:void(0);">
-                                <input type="text" class="form-control" placeholder="Say something">
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <!-- /Page Content -->

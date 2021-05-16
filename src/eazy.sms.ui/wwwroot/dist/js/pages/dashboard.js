@@ -168,7 +168,7 @@ $(document).ready(function() {
                 },
             },
         
-		colors: ['#58eda0', '#ed5887'],
+		colors: ['#58eda0', '#ed5887', '#6a04fb'],
 
             dataLabels: {
                 enabled: false
@@ -183,8 +183,12 @@ $(document).ready(function() {
                 data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 63, 60]
             }, {
                 name: 'Failed SMS',
-                data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 89, 95]
-            }],
+                data: [36, 85, 10, 28, 37, 15, 91, 14, 34, 49, 25]
+			},
+			{
+				name: 'Total SMS',
+				data: [86, 95, 101, 98, 87, 105, 91, 114, 94, 89, 95]
+			}],
             xaxis: {
                 categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
             },
