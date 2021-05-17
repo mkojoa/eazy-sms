@@ -21,7 +21,7 @@ namespace easy.sms.test.Notifications
         {
             //logic...
             From("Melteck")
-                .Subject("NewsLetter Subscription")
+                .Subject("NewsLetter Subscribed")
                 .Recipient(new[]
                     {
                         "0276002658",

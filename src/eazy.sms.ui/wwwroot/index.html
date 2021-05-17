@@ -14,6 +14,7 @@
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Nunito&amp;display=swap" rel="stylesheet">
     <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="./css/all.min.css" rel="stylesheet">
     <link href="./css/icomoon/style.css" rel="stylesheet">
 
@@ -35,7 +36,7 @@
         <div class="page-sidebar">
             <div class="profile-menu">
                 <a href="#">
-                    <img src="./images/avatars/avatar1.png" alt="">
+                    <img src="./images/avatars/avatar1.jpg" alt="">
                 </a>
             </div>
         </div><!-- /Page Sidebar -->
@@ -160,7 +161,7 @@
                                 </ul>
                             </li>
                             <li class="dropdown nav-item d-md-block">
-                                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="./images/avatars/avatar1.png" alt="" class="rounded-circle"></a>
+                                <a href="#" class="nav-link dropdown-toggle" id="navbarDropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><img src="./images/avatars/avatar1.jpg" alt="" class="rounded-circle"></a>
                                 <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                     <li><a href="#">Log Out</a></li>
                                 </ul>
@@ -265,7 +266,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">SMS List</h5>
                                     <div class="table-responsive">
-                                        <table class="table">
+                                        <table class="table cell-border hover" id="example">
                                             <thead>
                                                 <tr>
                                                     <th scope="col">#</th>
@@ -284,19 +285,23 @@
                                                     <td>Dec 15, 2019</td>
                                                     <td><span class="badge badge-success">Sent</span></td>
                                                     <td>
-                                                        <span class="btn btn-outline-info btn-sm">
+                                                        <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#exampleModal">
                                                             <i class="fa fa-eye" title="view message details"></i>
-                                                        </span> &nbsp;
-                                                        <span class="btn btn-outline-success btn-sm">
+                                                        </button> &nbsp;
+                                                        <button class="btn btn-outline-success btn-sm">
                                                             <i class="fa fa-redo" title="resend failed message"></i>
-                                                        </span>
-                                                        
+                                                        </button>
+
                                                     </td>
+
                                                 </tr>
                                                 <tr>
                                                     <th scope="row">09415</th>
-                                                    <td>CRM Application</td>
-                                                    <td>Gurpreet Holder</td>
+                                                    <td>NewsLetter Subscribed</td>
+                                                    <td>
+                                                        Thank you for signing up for our text newsletter.
+                                                        You’ll get a digestible and informative overview of all the most important startup and VC funding news.
+                                                    </td>
                                                     <td>Jul 8, 2019</td>
                                                     <td><span class="badge badge-danger">Failed</span></td>
                                                     <td>
@@ -312,23 +317,33 @@
                                             </tbody>
                                         </table>
                                     </div>
-                                    <div class="card-body">
-                                        <nav aria-label="Page navigation example">
-                                            <ul class="pagination pagination-circle justify-content-center">
-                                                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                            </ul>
-                                        </nav>
-                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div><!-- Main Wrapper -->
 
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                Woohoo, you're reading this text in a modal!
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="page-footer">
                     <p>2021 &copy; Eazy SMS</p>
@@ -348,5 +363,7 @@
     <script src="./css/apexcharts/dist/apexcharts.min.js"></script>
     <script src="./js/pagekit.min.js"></script>
     <script src="./js/pages/dashboard.js"></script>
+    <script src="./js/custom.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
 </body>
 </html>

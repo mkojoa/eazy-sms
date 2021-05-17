@@ -28,3 +28,15 @@
     transition: all .2s ease-in-out;
     border-color: #edf2f5;
 }
+
+@media (max-width: 767px) {
+    .pagination .paginate_button:not(.previous):not(.next) {
+        display: none;
+    }
+}
+
+.current {
+    color: #fff;
+    background-color: #448ceb;
+    border-color: #448ceb;
+}
