@@ -158,6 +158,7 @@ namespace eazy.sms.ui.Helpers
                 return;
             }
 
+
             await _staticFileMiddleware.Invoke(httpContext);
         }
 

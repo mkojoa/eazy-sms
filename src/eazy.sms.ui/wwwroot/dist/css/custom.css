@@ -44,3 +44,14 @@
 th.text-weight {
     font-weight: normal !important;
 }
+
+th.dt-center, td.dt-center {
+    text-align: center;
+}
+
+.table-responsive {
+    display: block;
+    width: 100%;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: hidden !important;
+}
