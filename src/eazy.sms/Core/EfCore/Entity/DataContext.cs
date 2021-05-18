@@ -14,7 +14,7 @@ namespace eazy.sms.Core.EfCore.Entity
         public DbSet<EventMessage> EventMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {   
             modelBuilder.Entity<EventMessage>(entity =>
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
@@ -25,6 +25,7 @@ namespace eazy.sms.Core.EfCore.Entity
                 entity.Property(e => e.SentStatus).HasDefaultValueSql("(0)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");
                 entity.Property(x => x.UpdatedAt).HasDefaultValueSql("(getdate())").ValueGeneratedOnAddOrUpdate();
+                entity.Property<string>("Message").HasField("_message");
             });
 
             OnModelCreatingPartial(modelBuilder);

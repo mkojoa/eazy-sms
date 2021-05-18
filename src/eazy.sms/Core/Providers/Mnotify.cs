@@ -7,6 +7,7 @@ using eazy.sms.Core.Providers.MnotifyHelpers.Helpers;
 using eazy.sms.Core.Providers.MnotifyHelpers.Models;
 using eazy.sms.Model;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json.Linq;
 
 namespace eazy.sms.Core.Providers
 {
@@ -106,7 +107,7 @@ namespace eazy.sms.Core.Providers
             var provider = (IDataProvider) serviceProvider.GetService(typeof(IDataProvider));
             var result = await provider.CreateDataAsync(new EventMessage
             {
-                Message = HelperExtention.ToDynamicJson(data),
+                Message = JObject.FromObject(data),// data.JObject,// HelperExtention.ToDynamicJson(data),
                 ResultMessage = "",
                 ResultStatus = "",
                 SentStatus = 0
