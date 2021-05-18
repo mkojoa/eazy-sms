@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using eazy.sms.Core.EfCore;
+using eazy.sms.Core.Helper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -12,6 +15,7 @@ using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -37,9 +41,9 @@ namespace eazy.sms.ui.Helpers
         /// <param name="options">The configuration options.</param>
         /// <param name="loggerFactory">An <see cref="ILoggerFactory"/> instance used to create loggers.</param>
         public MiddlewareExtention(
-            RequestDelegate next, 
-            IWebHostEnvironment hostingEnv, 
-            IOptions<StaticFileOptions> options, 
+            RequestDelegate next,
+            IWebHostEnvironment hostingEnv,
+            IOptions<StaticFileOptions> options,
             ILoggerFactory loggerFactory,
             IConfiguration configuration
             )
@@ -88,7 +92,7 @@ namespace eazy.sms.ui.Helpers
 
         private StaticFileMiddleware CreateStaticFileMiddleware(RequestDelegate next, IWebHostEnvironment hostingEnv, ILoggerFactory loggerFactory, IConfiguration configuration)
         {
-            var RequestPath = $"/{configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}"; 
+            var RequestPath = $"/{configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value}";
             var staticFileOptions = new StaticFileOptions
             {
                 RequestPath = RequestPath,
@@ -113,8 +117,29 @@ namespace eazy.sms.ui.Helpers
             // If the RoutePrefix is requested (with or without trailing slash), redirect to index URL
             if (httpMethod == "GET" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/api/sms/?$",
                 RegexOptions.IgnoreCase))
-            { 
+            {
                 //get api data
+                try
+                {
+                    httpContext.Response.ContentType = "application/json;charset=utf-8";
+
+                    var result = await FetchSMSDataAsync(httpContext);
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+                    await httpContext.Response.WriteAsync(result);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                    var errorMessage = httpContext.Request.IsLocal()
+                        ? JsonConvert.SerializeObject(new { errorMessage = ex.Message })
+                        : JsonConvert.SerializeObject(new { errorMessage = "Internal server error" });
+
+                    await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { errorMessage }));
+                }
+
+                return;
             }
 
             if (httpMethod == "GET" &&
@@ -136,13 +161,22 @@ namespace eazy.sms.ui.Helpers
             await _staticFileMiddleware.Invoke(httpContext);
         }
 
+        private async Task<string> FetchSMSDataAsync(HttpContext httpContext)
+        {
+            var provider = httpContext.RequestServices.GetService<IDataProvider>();
+            var dataResult = await provider.FetchDataAsync(2); // two for all record
+            var result = JsonConvert.SerializeObject(dataResult, _jsonSerializerOptions);
+            return result;
+        }
+
         private async Task RespondWithIndexHtml(HttpResponse response)
         {
-            var RoutePrefix  = _configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value;
+            var RoutePrefix = _configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value;
             var AuthType = "";
 
             response.StatusCode = 200;
             response.ContentType = "text/html;charset=utf-8";
+
 
             await using var stream = IndexStream();
             var htmlBuilder = new StringBuilder(await new StreamReader(stream).ReadToEndAsync());
@@ -160,5 +194,6 @@ namespace eazy.sms.ui.Helpers
 
         private Func<Stream> IndexStream { get; } =
             () => Assembly.GetExecutingAssembly().GetManifestResourceStream("eazy.sms.ui.wwwroot.index.html");
+
     }
 }

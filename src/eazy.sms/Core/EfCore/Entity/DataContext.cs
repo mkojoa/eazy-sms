@@ -4,14 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace eazy.sms.Core.EfCore.Entity
 {
-    public sealed class DataContext : DbContext
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions options) : base(options)
         {
             if (!Database.CanConnect()) Database.EnsureCreated();
         }
 
-        public static DbSet<EventMessage> EventMessages => null;
+        public DbSet<EventMessage> EventMessages { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,8 @@ namespace eazy.sms.Core.EfCore.Entity
             {
                 entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
                 entity.Property(e => e.Message).HasDefaultValueSql("(NULL)");
-                entity.Property(e => e.ResultStatus).HasDefaultValueSql("(NULL)");
+                entity.Property(
+                    e => e.ResultStatus).HasDefaultValueSql("(NULL)");
                 entity.Property(e => e.ResultMessage).HasDefaultValueSql("(NULL)");
                 entity.Property(e => e.SentStatus).HasDefaultValueSql("(0)");
                 entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getdate())");

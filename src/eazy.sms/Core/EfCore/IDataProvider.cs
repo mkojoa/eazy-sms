@@ -7,7 +7,6 @@ namespace eazy.sms.Core.EfCore
     public interface IDataProvider
     {
         Task<IEnumerable<EventMessage>> FetchDataAsync(int level);
-
         Task<EventMessage> CreateDataAsync(EventMessage eventMessage);
         Task UpdateDataAsync(EventMessage eventMessage);
         void Commit();

@@ -34,5 +34,9 @@
     <Folder Include="wwwroot\dist\css\bootstrap\css\" />
     <Folder Include="wwwroot\dist\css\bootstrap\js\" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\eazy.sms\eazy.sms.csproj" />
+  </ItemGroup>
 
 </Project>

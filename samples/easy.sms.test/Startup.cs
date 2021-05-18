@@ -1,4 +1,5 @@
 using eazy.sms;
+using eazy.sms.ui;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -38,7 +39,8 @@ namespace easy.sms.test
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "easy.sms.test v1"));
             }
 
-            app.UseEazySms(Configuration);
+
+            app.UseEazySmsUI(Configuration);
 
             app.UseRouting();
 

@@ -2,7 +2,6 @@
 using eazy.sms.Core.EfCore;
 using eazy.sms.Core.EfCore.Entity;
 using eazy.sms.Core.Providers;
-using eazy.sms.ui;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -34,10 +33,10 @@ namespace eazy.sms
         }
 
 
-        public static IApplicationBuilder UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
-        {
-           return app.UseEazySmsUi(configuration);
-        }
+        //public static IApplicationBuilder UseEazySms(this IApplicationBuilder app, IConfiguration configuration)
+        //{
+        //   return app.UseEazySmsUi(configuration);
+        //}
 
         private static void EfCoreIoC(IServiceCollection services, IConfiguration configuration)
         {

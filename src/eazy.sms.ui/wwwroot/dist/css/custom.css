@@ -40,3 +40,7 @@
     background-color: #448ceb;
     border-color: #448ceb;
 }
+
+th.text-weight {
+    font-weight: normal !important;
+}

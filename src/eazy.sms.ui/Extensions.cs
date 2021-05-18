@@ -9,8 +9,8 @@ namespace eazy.sms.ui
 {
     public static class Extensions
     {
-        public static IApplicationBuilder UseEazySmsUi(this IApplicationBuilder applicationBuilder, IConfiguration configuration)
-        {
+        public static IApplicationBuilder UseEazySmsUI(this IApplicationBuilder applicationBuilder, IConfiguration configuration)
+        { 
             if (applicationBuilder == null)
                 throw new ArgumentNullException(nameof(applicationBuilder));
 
