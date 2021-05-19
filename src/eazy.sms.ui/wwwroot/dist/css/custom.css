@@ -55,3 +55,54 @@ th.dt-center, td.dt-center {
     -webkit-overflow-scrolling: touch;
     overflow-x: hidden !important;
 }
+
+.notification-badge-custom {
+    width: 20px !important;
+    height: 20px !important;
+    display: block;
+    line-height: 22px !important;
+    text-align: center;
+    border-radius: 100%;
+    display: inline-block;
+    vertical-align: top;
+    margin-top: 5px;
+    cursor: default;
+}
+
+.user-activity ul {
+    margin-bottom: 0;
+    overflow-y: scroll;
+    height: 362px;
+}
+
+#sms-activity::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: #F5F5F5;
+}
+
+#sms-activity::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+}
+
+#sms-activity::-webkit-scrollbar-thumb {
+    background-color: #000000;
+}
+
+table.dataTable {
+    width: 100%;
+    margin: 0 auto;
+    clear: both;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 1px solid #00000017 !important;
+}
+
+.user-activity .notification-info {
+    width: 204px;
+    display: block;
+    padding: 5px 10px !important;
+    display: inline-block;
+    vertical-align: middle;
+    font-weight: 400;
+}

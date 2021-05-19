@@ -82,6 +82,7 @@ const fetchData = () => {
         xhrFields: xf,
         success: function (data) {
             fetchDataToProgressBar(data); // populate progress bar
+            fetchDataToActivitySms(data); // populate activity
             fetchDataToSMSTable(data); // populate datatable
             fetchDataToChatBar(data);  // populate chat bar
         }
@@ -103,8 +104,8 @@ const fetchDataToProgressBar = (data) => {
     var recordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 })
     var recordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 })
 
-    var sentPercentageRecord = (recordSentFilter.length / 100) * recordTotal
-    var failedPercentageRecord = (recordFailedFilter.length / 100) * recordTotal
+    var sentPercentageRecord = (recordSentFilter.length / recordTotal) * 100
+    var failedPercentageRecord = (recordFailedFilter.length / recordTotal) * 100
 
     progressElement.innerHTML = `
                             <div class="col-sm">
@@ -137,7 +138,7 @@ const fetchDataToProgressBar = (data) => {
                                             <div class="info-card">
                                                 <h4 class="info-title">Total SMS Sent<span class="info-stats">${recordTotal}</span></h4>
                                                 <div class="progress" style="height: 3px;">
-                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: ${failedPercentageRecord}%" aria-valuenow='${sentPercentageRecord}' aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -147,11 +148,158 @@ const fetchDataToProgressBar = (data) => {
 }
 
 const fetchDataToActivitySms = (data) => {
+    let progressElement = document.querySelector('#sms-activity');
 
+    let htmlData = `<ul class="list-unstyled" id="sms-activity">`;
+
+
+    data.forEach(function (sms) {
+
+        let message = JSON.parse(sms.message ? sms.message : '');
+
+        htmlData += `
+                <li>
+                    <div>
+                        <span class="notification-badge-custom bg-${sms.sentStatus ? 'success' : 'danger'}"><b>S</b></span>
+                        <span class="notification-${sms.sentStatus ? 'success' : 'danger'}">
+                            <span class="notification-info">${message.campaign} 15min ago</span>
+                        </span>
+                    </div>
+                </li>
+        `;
+    });
+
+    htmlData += `</ul>`;
+    progressElement.innerHTML = htmlData;
 }
 
 const fetchDataToChatBar = (data) => {
+    "use strict";
 
+    //Jan
+    var JanRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 1 }).length;
+    var JanRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 1 }).length
+    var JanRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 1 }).length
+
+    //Feb
+    var FebRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 2 }).length;
+    var FebRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 2 }).length
+    var FebRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 2 }).length
+
+    // Mar
+    var MarRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 3 }).length;
+    var MarRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 3 }).length
+    var MarRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 3 }).length
+
+    // Apr
+    var AprRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 4 }).length;
+    var AprRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 4 }).length
+    var AprRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 4 }).length
+
+
+    // May
+    var MayRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 5 }).length;
+    var MayRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 5 }).length
+    var MayRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 5 }).length
+
+    // Jun
+    var JunRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 6 }).length;
+    var JunRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 6 }).length
+    var JunRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 6 }).length
+
+    // Jul
+    var JulRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 7 }).length;
+    var JulRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 7 }).length
+    var JulRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 7 }).length
+
+    // Aug
+    var AugRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 8 }).length;
+    var AugRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 8 }).length
+    var AugRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 8 }).length
+
+    // Sep
+    var SepRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 9 }).length;
+    var SepRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 9 }).length
+    var SepRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 9 }).length
+
+
+    // Oct
+    var OctRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 10 }).length;
+    var OctRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 10 }).length
+    var OctRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 10 }).length
+
+    // Nov
+    var NovRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 11 }).length;
+    var NovRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 11 }).length
+    var NovRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 11 }).length
+
+    // Dec
+    var DecRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 12 }).length;
+    var DecRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 12 }).length
+    var DecRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 12 }).length
+
+
+    var options = {
+        chart: {
+            height: 350,
+            type: 'bar',
+
+            toolbar: {
+                show: false
+            }
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded'
+            },
+        },
+
+        colors: ['#58eda0', '#ed5887', '#6a04fb'],
+
+
+
+
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            colors: ['transparent']
+        },
+        series: [{
+            name: 'Sent SMS',
+            data: [JanRecordSentFilter, FebRecordSentFilter, MarRecordSentFilter, AprRecordSentFilter, MayRecordSentFilter, JunRecordSentFilter, JulRecordSentFilter, AugRecordSentFilter, SepRecordSentFilter, NovRecordSentFilter, DecRecordSentFilter]
+        }, {
+            name: 'Failed SMS',
+            data: [JanRecordFailedFilter, FebRecordFailedFilter, MarRecordFailedFilter, AprRecordFailedFilter, MayRecordFailedFilter, JunRecordFailedFilter, JulRecordFailedFilter, AugRecordFailedFilter, SepRecordFailedFilter, NovRecordFailedFilter, DecRecordFailedFilter]
+        },
+        {
+            name: 'Total SMS',
+            data: [JanRecordTotal, FebRecordTotal, MarRecordTotal, AprRecordTotal, MayRecordTotal, JunRecordTotal, JulRecordTotal, AugRecordTotal, SepRecordTotal, NovRecordTotal, DecRecordTotal]
+        }],
+        xaxis: {
+            categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        },
+        fill: {
+            opacity: 1
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "sum " + val + " "
+                }
+            }
+        }
+    }
+    var chart = new ApexCharts(
+        document.querySelector("#apex1"),
+        options
+    );
+
+    chart.render();
 }
 
 const fetchDataToSMSTable = (data) => {
@@ -222,7 +370,7 @@ const fetchDataToSMSTable = (data) => {
         },
         "aoColumns": [
             {
-                "mData": null,
+                "mData": "#",
             },
             {
                 "mData": "Subject",
@@ -293,6 +441,10 @@ const fetchDataToSMSTable = (data) => {
             cell.innerHTML = i + 1;
         });
     }).draw();
+
+    setInterval(function () {
+        smsTable.ajax.reload();
+    }, 30000);
 
     $(document).on('click', '.get--details', function () {
         let { id, message, createdAt, resultMessage, resultStatus, sentStatus, updatedAt } = $(this).data('content');
