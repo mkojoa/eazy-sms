@@ -223,55 +223,56 @@ $(document).ready(function () {
             console.log(err)
         }
 
-        //console.log({ id, message, createdAt, resultMessage, resultStatus, sentStatus, updatedAt });
-
         let tableElement = document.querySelector('#message--display');
 
         tableElement.innerHTML = `<tr>
-                                                <th scope="col">#</th>
-                                                <th scope="row" style="font-weight: normal"><code>${id}</code ></th>
-                                            </tr>
-                                            <tr>
-                                                <th scope="col">Subject</th>
-                                                <th scope="row" style="font-weight: normal">${message.campaign}</th>
-                                            </tr>
-                                            <tr>
+                                    <th scope="col">#</th>
+                                        <th scope="row" style="font-weight: normal"><code>${id}</code ></th>
+                                    </tr>
+                                    <tr>
+                                        <th scope="col">Subject</th>
+                                        <th scope="row" style="font-weight: normal">${message.campaign}</th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Message</th>
-                                                <th scope="row" style="font-weight: normal">${message.message}</th>
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Message</th>
+                                        <th scope="row" style="font-weight: normal">${message.message}</th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Recipient</th>
-                                                <th scope="row" style="font-weight: normal"><code>${Array.isArray(message.recipient) ? message.recipient.join(', ') : ''}</code ></th >
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Recipient</th>
+                                        <th scope="row" style="font-weight: normal"><code>${Array.isArray(message.recipient) ? message.recipient.join(', ') : ''}</code ></th >
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Status</th>
-                                                <th scope="row" style="font-weight: normal"><span class="badge badge-${sentStatus ? 'success' : 'danger'}">${sentStatus ? 'Sent' : 'Failed'}</span></th>
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Status</th>
+                                        <th scope="row" style="font-weight: normal"><span class="badge badge-${sentStatus ? 'success' : 'danger'}">${sentStatus ? 'Sent' : 'Failed'}</span></th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Sender</th>
-                                                <th scope="row" style="font-weight: normal"><code>${message.sender}</code></th>
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Sender</th>
+                                        <th scope="row" style="font-weight: normal"><code>${message.sender}</code></th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Enable Schedule</th>
-                                                <th scope="row" style="font-weight: normal">${message.is_schedule ? 'Yes' : 'No'}</th>
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Enable Schedule</th>
+                                        <th scope="row" style="font-weight: normal">${message.is_schedule ? 'Yes' : 'No'}</th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Schedule Date</th>
-                                                <th scope="row" style="font-weight: normal">${message.schedule_date ? message.schedule_date : 'No date'}</th>
-                                            </tr>
-                                            <tr>
+                                        <th scope="col">Schedule Date</th>
+                                        <th scope="row" style="font-weight: normal">${message.schedule_date ? message.schedule_date : 'No date'}</th>
+                                    </tr>
+                                    <tr>
 
-                                                <th scope="col">Attachment</th>
-                                                <th scop;e="row" style="font-weight: normal">${message.file ? message.file : 'No file attached'} </th>
-                                            </tr>`
+                                        <th scope="col">Attachment Name</th>
+                                        <th scop;e="row" style="font-weight: normal">${message.file ? message.file.replace(/^.*[\\\/]/, '') : 'No file attached'}</th>
+                                    </tr>
+                                    <tr>
 
-
+                                        <th scope="col">Attachment Path</th>
+                                        <th scop;e="row" style="font-weight: normal"><small>${message.file ? "\wwwroot" + message.file.split('wwwroot').pop().split(';')[0] : 'No file attached'} </small></th>
+                                    </tr>`;
 
         $('#exampleModal').modal('show');
     });
