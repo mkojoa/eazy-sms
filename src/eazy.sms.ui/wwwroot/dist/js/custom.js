@@ -8,7 +8,7 @@ const routePrefix = {
 
 const init = (config) => {
     routePrefix.setUrl = config.routePrefix;
-    //fetchData();
+    fetchData();
 }
 
 class DateHandler {
@@ -73,7 +73,84 @@ class DateHandler {
     }
 }
 
-$(document).ready(function () {
+const fetchData = () => {
+    const url = `${location.pathname.replace("/index.html", "")}/api/sms`;
+
+    let xf = null;
+    $.get({
+        url: url,
+        xhrFields: xf,
+        success: function (data) {
+            fetchDataToProgressBar(data); // populate progress bar
+            fetchDataToSMSTable(data); // populate datatable
+        }
+    }).fail(function (error) {
+        if (error.status === 500) {
+            const x = JSON.parse(error.responseJSON.errorMessage);
+            alert(x.errorMessage);
+        } else {
+            alert(error.responseText);
+        }
+    });
+}
+
+const fetchDataToProgressBar = (data) => {
+
+    let progressElement = document.querySelector('#progress-sms-bar');
+
+    var recordTotal = data.length;
+    var recordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 })
+    var recordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 })
+
+    var sentPercentageRecord = (recordSentFilter.length / 100) * recordTotal
+    var failedPercentageRecord = (recordFailedFilter.length / 100) * recordTotal
+
+    progressElement.innerHTML = `
+                            <div class="col-sm">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="info-card">
+                                                <h4 class="info-title">Sent SMS<span class="info-stats">${recordSentFilter.length}</span></h4>
+                                                <div class="progress" style="height: 3px;">
+                                                    <div class="progress-bar bg-success" role="progressbar" style="width: ${sentPercentageRecord}%" aria-valuenow='${sentPercentageRecord}' aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="info-card">
+                                                <h4 class="info-title">Failed SMS<span class="info-stats">${recordFailedFilter.length}</span></h4>
+                                                <div class="progress" style="height: 3px;">
+                                                    <div class="progress-bar bg-danger" role="progressbar" style="width: ${failedPercentageRecord}%" aria-valuenow='${sentPercentageRecord}' aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="info-card">
+                                                <h4 class="info-title">Total SMS Sent<span class="info-stats">${recordTotal}</span></h4>
+                                                <div class="progress" style="height: 3px;">
+                                                    <div class="progress-bar bg-info" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        `;
+}
+
+const fetchDataToActivitySms = (data) => {
+
+}
+
+const fetchDataToSMSTable = (data) => {
+
     const url = `${location.pathname.replace("/index.html", "")}/api/sms`;
 
     // Initialize Datatables
@@ -181,7 +258,7 @@ $(document).ready(function () {
                 "mData": "Status",
                 "render": function (data, type, sms) {
                     try {
-                        
+
                         return `<span class="badge badge-${sms.sentStatus ? 'success' : 'danger'}">${sms.sentStatus ? 'Sent' : 'Failed'}</span>`
                     } catch (err) {
 
@@ -193,8 +270,6 @@ $(document).ready(function () {
                 "mData": "pkId",
                 "render": function (data, type, sms) {
                     let c = JSON.parse(sms.message ? sms.message : '');
-                    console.log(c)
-
                     var t =
                         `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
                                 <i class="fa fa-eye" title="view message details"></i>
@@ -225,6 +300,7 @@ $(document).ready(function () {
 
         let tableElement = document.querySelector('#message--display');
 
+
         tableElement.innerHTML = `<tr>
                                     <th scope="col">#</th>
                                         <th scope="row" style="font-weight: normal"><code>${id}</code ></th>
@@ -236,7 +312,7 @@ $(document).ready(function () {
                                     <tr>
 
                                         <th scope="col">Message</th>
-                                        <th scope="row" style="font-weight: normal">${message.message}</th>
+                                        <th scope="row" style="font-weight: normal">${message.file ? '<span type="button" class="audio-file"><i class="fa fa-file-audio btn btn-info btn-sm"></i></span>' : message.message}</th>
                                     </tr>
                                     <tr>
 
@@ -274,7 +350,18 @@ $(document).ready(function () {
                                         <th scop;e="row" style="font-weight: normal"><small>${message.file ? "\wwwroot" + message.file.split('wwwroot').pop().split(';')[0] : 'No file attached'} </small></th>
                                     </tr>`;
 
+
+        //<button onclick-"play();" class="btn btn-info btn-sm" ><i class="fa fa-file"></i></button>
+
         $('#exampleModal').modal('show');
     });
 
-});
+    // audio file
+    $(document).on("click", ".audio-file", function () {
+        var audio = new Audio("C:\\Users\\MAmeyaw\\RiderProjects\\eazy-sms\\samples\\easy.sms.test\\wwwroot\\Template\\Voice\\ringtone.mp3");
+
+        console.log(audio);
+
+        audio.play();
+    });
+}
