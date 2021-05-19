@@ -21,7 +21,7 @@ using mnotify sms gateway , etc.. in your `.netcore >= 3.1` applications.
     - Install-Package eazy-sms
 
 #### Getting Started
-`AddEazySms(Configuration)` which accepts IConfiguration object  must be injected in `ConfigureServices` method in the `Startup` class.
+`AddEazySms(Configuration)` & `UseEazySmsUI(Configuration)` which accepts IConfiguration object  must be injected in `ConfigureServices` and `Configure` method in the `Startup` class.
 
 > ConfigureServices
    ```c#
@@ -34,7 +34,7 @@ using mnotify sms gateway , etc.. in your `.netcore >= 3.1` applications.
     // Configure Method.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
-        app.UseEazySms(Configuration);
+        app.UseEazySmsUI(Configuration);;
     }
    ```
 
