@@ -10,19 +10,7 @@ namespace eazy.sms.Core.EfCore.Entity
         private string _message;
 
         public Guid Id { get; set; }
-        //public string Message { get; set; }
-        [NotMapped]
-        public JObject Message
-        {
-            get
-            {
-                return JsonConvert.DeserializeObject<JObject>(string.IsNullOrEmpty(_message) ? "{}" : _message);
-            }
-            set
-            {
-                _message = value.ToString();
-            }
-        }
+        public string Message { get; set; }
         public string ResultMessage { get; set; }
         public string ResultStatus { get; set; }
         public int SentStatus { get; set; }
