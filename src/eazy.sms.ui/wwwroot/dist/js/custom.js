@@ -83,6 +83,7 @@ const fetchData = () => {
         success: function (data) {
             fetchDataToProgressBar(data); // populate progress bar
             fetchDataToSMSTable(data); // populate datatable
+            fetchDataToChatBar(data);  // populate chat bar
         }
     }).fail(function (error) {
         if (error.status === 500) {
@@ -146,6 +147,10 @@ const fetchDataToProgressBar = (data) => {
 }
 
 const fetchDataToActivitySms = (data) => {
+
+}
+
+const fetchDataToChatBar = (data) => {
 
 }
 
