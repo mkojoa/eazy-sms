@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using eazy.sms.Core.EfCore.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace eazy.sms.Core.EfCore
 {
@@ -13,7 +14,15 @@ namespace eazy.sms.Core.EfCore
         {
             _context = dataContext;
 
-            if (!_context.Database.CanConnect()) _context.Database.EnsureCreated();
+            try
+            {
+                if (!_context.Database.CanConnect()) _context.Database.EnsureCreated();
+            }
+            catch (System.Exception ex)
+            {
+
+                //throw;
+            }
         }
 
         public void Commit()
@@ -38,7 +47,19 @@ namespace eazy.sms.Core.EfCore
 
         public async Task UpdateDataAsync(EventMessage eventMessage)
         {
-            _context.Update(eventMessage);
+            
+            try
+            {
+                _context.Entry(eventMessage).State = EntityState.Modified;
+                _context.Entry(eventMessage).Property(x => x.CreatedAt).IsModified = false;
+               
+                //_context.Update(eventMessage);
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
         }
     }
 }
