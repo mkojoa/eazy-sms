@@ -7,6 +7,7 @@
   <ItemGroup>
     <EmbeddedResource Include="wwwroot/index.html" />
     <EmbeddedResource Include="wwwroot/dist/**/*" />
+    <EmbeddedResource Include="wwwroot/login.html" />
   </ItemGroup>
 
   <ItemGroup>

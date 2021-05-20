@@ -100,19 +100,21 @@ const fetchDataToActivitySms = (data) => {
 
     let htmlData = `<ul class="list-unstyled" id="sms-activity">`;
 
+    //array.sort(function (a, b) {
+    //    return a.start.localeCompare(b.start);
+    //});
 
+   // console.log(data) //createdAt
     data.forEach(function (sms) {
 
         let message = JSON.parse(sms.message ? sms.message : '');
-
-        console.log(timeAgoFunc(sms.updatedAt))
 
         htmlData += `
                 <li>
                     <div>
                         <span class="notification-badge-custom bg-${sms.sentStatus ? 'success' : 'danger'}"><b>S</b></span>
                         <span class="notification-${sms.sentStatus ? 'success' : 'danger'}">
-                            <span class="notification-info">${message.campaign} ${timeAgoFunc(sms.updatedAt)}</span>
+                            <span class="notification-info">${message.campaign} ${timeAgoFunc(sms.createdAt)}</span>
                         </span>
                     </div>
                 </li>
@@ -128,66 +130,66 @@ const fetchDataToChatBar = (data) => {
     "use strict";
 
     //Jan
-    var JanRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 1 }).length;
-    var JanRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 1 }).length
-    var JanRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 1 }).length
+    var JanRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 1 }).length;
+    var JanRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 1 }).length
+    var JanRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 1 }).length
 
     //Feb
-    var FebRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 2 }).length;
-    var FebRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 2 }).length
-    var FebRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 2 }).length
+    var FebRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 2 }).length;
+    var FebRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 2 }).length
+    var FebRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 2 }).length
 
     // Mar
-    var MarRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 3 }).length;
-    var MarRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 3 }).length
-    var MarRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 3 }).length
+    var MarRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 3 }).length;
+    var MarRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 3 }).length
+    var MarRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 3 }).length
 
     // Apr
-    var AprRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 4 }).length;
-    var AprRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 4 }).length
-    var AprRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 4 }).length
+    var AprRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 4 }).length;
+    var AprRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 4 }).length
+    var AprRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 4 }).length
 
 
     // May
-    var MayRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 5 }).length;
-    var MayRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 5 }).length
-    var MayRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 5 }).length
+    var MayRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 5 }).length;
+    var MayRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 5 }).length
+    var MayRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 5 }).length
 
     // Jun
-    var JunRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 6 }).length;
-    var JunRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 6 }).length
-    var JunRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 6 }).length
+    var JunRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 6 }).length;
+    var JunRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 6 }).length
+    var JunRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 6 }).length
 
     // Jul
-    var JulRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 7 }).length;
-    var JulRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 7 }).length
-    var JulRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 7 }).length
+    var JulRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 7 }).length;
+    var JulRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 7 }).length
+    var JulRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 7 }).length
 
     // Aug
-    var AugRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 8 }).length;
-    var AugRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 8 }).length
-    var AugRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 8 }).length
+    var AugRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 8 }).length;
+    var AugRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 8 }).length
+    var AugRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 8 }).length
 
     // Sep
-    var SepRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 9 }).length;
-    var SepRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 9 }).length
-    var SepRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 9 }).length
+    var SepRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 9 }).length;
+    var SepRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 9 }).length
+    var SepRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 9 }).length
 
 
     // Oct
-    var OctRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 10 }).length;
-    var OctRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 10 }).length
-    var OctRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 10 }).length
+    var OctRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 10 }).length;
+    var OctRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 10 }).length
+    var OctRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 10 }).length
 
     // Nov
-    var NovRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 11 }).length;
-    var NovRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 11 }).length
-    var NovRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 11 }).length
+    var NovRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 11 }).length;
+    var NovRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 11 }).length
+    var NovRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 11 }).length
 
     // Dec
-    var DecRecordTotal = [...data].filter((item) => { return new Date(item.updatedAt).getMonth() + 1 == 12 }).length;
-    var DecRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.updatedAt).getMonth() + 1 == 12 }).length
-    var DecRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.updatedAt).getMonth() + 1 == 12 }).length
+    var DecRecordTotal = [...data].filter((item) => { return new Date(item.createdAt).getMonth() + 1 == 12 }).length;
+    var DecRecordSentFilter = [...data].filter((item) => { return item.sentStatus == 1 && new Date(item.createdAt).getMonth() + 1 == 12 }).length
+    var DecRecordFailedFilter = [...data].filter((item) => { return item.sentStatus == 0 && new Date(item.createdAt).getMonth() + 1 == 12 }).length
 
 
     var options = {
@@ -277,7 +279,7 @@ const fetchDataToSMSTable = (data) => {
     //                <td scope="row">${_count}</td>
     //                <td scope="row">${message.campaign}</td>
     //                <td scope="row">${message.message}</td>
-    //                <td scope="row">${sms.updatedAt}</td>
+    //                <td scope="row">${sms.createdAt}</td>
     //                <td scope="row">
     //                    <span class="badge badge-${sms.sentStatus ? 'success' : 'danger'}">${sms.sentStatus ? 'Sent' : 'Failed'}</span>
     //                </td>
@@ -392,7 +394,7 @@ const fetchDataToSMSTable = (data) => {
                 "render": function (data, type, sms) {
                     try {
                         ;
-                        return formatDate(sms.updatedAt) || 'No date';
+                        return formatDate(sms.createdAt) || 'No date';
                     } catch (err) {
 
                     }
@@ -439,7 +441,7 @@ const fetchDataToSMSTable = (data) => {
     }, 30000);
 
     $(document).on('click', '.get--details', function () {
-        let { id, message, createdAt, resultMessage, resultStatus, sentStatus, updatedAt } = $(this).data('content');
+        let { id, message, createdAt, sentStatus, } = $(this).data('content');
 
         try {
             message = JSON.parse(message ? message : '')
