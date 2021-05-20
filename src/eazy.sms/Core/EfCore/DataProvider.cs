@@ -13,7 +13,15 @@ namespace eazy.sms.Core.EfCore
         {
             _context = dataContext;
 
-            if (!_context.Database.CanConnect()) _context.Database.EnsureCreated();
+            try
+            {
+                if (!_context.Database.CanConnect()) _context.Database.EnsureCreated();
+            }
+            catch (System.Exception ex)
+            {
+
+                //throw;
+            }
         }
 
         public void Commit()

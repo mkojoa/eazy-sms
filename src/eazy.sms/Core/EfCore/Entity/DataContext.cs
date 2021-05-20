@@ -8,7 +8,12 @@ namespace eazy.sms.Core.EfCore.Entity
     {
         public DataContext(DbContextOptions options) : base(options)
         {
-            if (!Database.CanConnect()) Database.EnsureCreated();
+            try
+            {
+                if (!Database.CanConnect()) Database.EnsureCreated();
+            }
+            catch (Exception)
+            { }
         }
 
         public DbSet<EventMessage> EventMessages { get; set; }

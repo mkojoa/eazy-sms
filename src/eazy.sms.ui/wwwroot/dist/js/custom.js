@@ -11,68 +11,7 @@ const init = (config) => {
     fetchData();
 }
 
-class DateHandler {
-
-    formatDate = (date, format) => {
-        date = newDate(date) || "";
-        return newIntl.DateTimeFormat(`en-${format.toUpperCase()}`).format(date)
-            .split('/').map(x => x.length < 2 ? '0' + x : x).join('/') || "";
-    }
-
-    getCurrentDate = (format = 'us', seperator = '/') => {
-        let date = new Date();
-        let sep = seperator;
-        let year = date.getFullYear();
-        let month = (1 + date.getMonth()).toString();
-        month = month.length > 1 ? month : '0' + month;
-        let day = date.getDate().toString();
-        day = day.length > 1 ? day : '0' + day;
-        format = format.toLowerCase()
-        return format === 'us' ? `${month}${sep}${day}${sep}${year}` :
-            format === 'gb' ? `${day}${sep}${month}${sep}${year}` : 'Invalid Date'
-    }
-
-    customDate = (date, format = 'dmy', separator = '/') => {
-        date = new Date(date)
-        let s = separator
-        format = format.toLowerCase()
-        let year = date.getFullYear();
-        let month = (1 + date.getMonth()).toString();
-        month = month.length > 1 ? month : '0' + month;
-        let day = date.getDate().toString();
-        day = day.length > 1 ? day : '0' + day;
-        return format === "dmy" ? `${day}${s}${month}${s}${year}` : format === "mdy" ?
-            `${month}${s}${day}${s}${year}` : format === "ymd" ?
-                `${year}${s}${month}${s}${day}` : 'Invalid Date'
-    }
-
-    addDays = (date, NumWorkDays) => {
-        date = new Date(date);
-        date.setDate(date.getDate() + NumWorkDays);
-        return date;
-    }
-
-    calendarHelp = (date, sep) => {
-        date = new Date(date);
-        let months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-        let year = date.getFullYear();
-        let month = (1 + date.getMonth());
-        let day = date.getDate().toString();
-        return `${day}${sep}${months[month - 1]}${sep}${year}`
-    }
-
-    getCalculatedAge = (birthdate) => {
-        let today = new Date();
-        let birthDate = new Date(birthdate);
-        let age = today.getFullYear() - birthDate.getFullYear();
-        let m = today.getMonth() - birthDate.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
-    }
-}
-
+//Fetch Data From Api
 const fetchData = () => {
     const url = `${location.pathname.replace("/index.html", "")}/api/sms`;
 
@@ -81,21 +20,29 @@ const fetchData = () => {
         url: url,
         xhrFields: xf,
         success: function (data) {
+            Indicator(data);
             fetchDataToProgressBar(data); // populate progress bar
             fetchDataToActivitySms(data); // populate activity
             fetchDataToSMSTable(data); // populate datatable
             fetchDataToChatBar(data);  // populate chat bar
         }
     }).fail(function (error) {
+        let errorElement = document.querySelector('#error');
+
         if (error.status === 500) {
             const x = JSON.parse(error.responseJSON.errorMessage);
-            alert(x.errorMessage);
+            errorElement.innerHTML = x.errorMessage
+            document.getElementById('loader-wrapper').style.display = "none"
+            $('#errorModal').modal('show');
         } else {
-            alert(error.responseText);
+            errorElement.innerHTML = error.responseText
+            document.getElementById('loader-wrapper').style.display = "none"
+            $('#errorModal').modal('show');
         }
     });
 }
 
+// Progress Bar
 const fetchDataToProgressBar = (data) => {
 
     let progressElement = document.querySelector('#progress-sms-bar');
@@ -147,6 +94,7 @@ const fetchDataToProgressBar = (data) => {
                         `;
 }
 
+// SMS Activity List
 const fetchDataToActivitySms = (data) => {
     let progressElement = document.querySelector('#sms-activity');
 
@@ -157,12 +105,14 @@ const fetchDataToActivitySms = (data) => {
 
         let message = JSON.parse(sms.message ? sms.message : '');
 
+        console.log(timeAgoFunc(sms.updatedAt))
+
         htmlData += `
                 <li>
                     <div>
                         <span class="notification-badge-custom bg-${sms.sentStatus ? 'success' : 'danger'}"><b>S</b></span>
                         <span class="notification-${sms.sentStatus ? 'success' : 'danger'}">
-                            <span class="notification-info">${message.campaign} 15min ago</span>
+                            <span class="notification-info">${message.campaign} ${timeAgoFunc(sms.updatedAt)}</span>
                         </span>
                     </div>
                 </li>
@@ -173,6 +123,7 @@ const fetchDataToActivitySms = (data) => {
     progressElement.innerHTML = htmlData;
 }
 
+// Chart Bar
 const fetchDataToChatBar = (data) => {
     "use strict";
 
@@ -302,6 +253,8 @@ const fetchDataToChatBar = (data) => {
     chart.render();
 }
 
+
+// Chart Datatable
 const fetchDataToSMSTable = (data) => {
 
     const url = `${location.pathname.replace("/index.html", "")}/api/sms`;
@@ -405,7 +358,10 @@ const fetchDataToSMSTable = (data) => {
         },
         "aoColumns": [
             {
-                "mData": null,
+                "mData": "id",
+                "render": function (data, type, row, meta) {
+                    return meta.row + 1;
+                }
             },
             {
                 "mData": "Subject",
@@ -435,7 +391,8 @@ const fetchDataToSMSTable = (data) => {
                 "mData": "Date",
                 "render": function (data, type, sms) {
                     try {
-                        return DateHandler.calendarHelp(sms.updatedAt, '-') || 'No date';
+                        ;
+                        return formatDate(sms.updatedAt) || 'No date';
                     } catch (err) {
 
                     }
@@ -459,12 +416,12 @@ const fetchDataToSMSTable = (data) => {
                 "render": function (data, type, sms) {
                     let c = JSON.parse(sms.message ? sms.message : '');
                     var t =
-    `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
-            <i class="fa fa-eye" title="view message details"></i>
-        </button>
-        <button class="btn btn-outline-success btn-sm">
-            <i class="fa fa-redo" title="resend failed message"></i>
-        </button>`;
+                        `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
+                                <i class="fa fa-eye" title="view message details"></i>
+                            </button>
+                            <button class="btn btn-outline-success btn-sm">
+                                <i class="fa fa-redo" title="resend failed message"></i>
+                        </button>`;
 
                     return t;
                 }
@@ -495,55 +452,52 @@ const fetchDataToSMSTable = (data) => {
 
         tableElement.innerHTML = `<tr>
                                     <th scope="col">#</th>
-                                        <th scope="row" style="font-weight: normal"><code>${id}</code ></th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important"><code>${id}</code ></th>
                                     </tr>
                                     <tr>
                                         <th scope="col">Subject</th>
-                                        <th scope="row" style="font-weight: normal">${message.campaign}</th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important">${message.campaign}</th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Message</th>
-                                        <th scope="row" style="font-weight: normal">${message.file ? '<span type="button" class="audio-file"><i class="fa fa-file-audio btn btn-info btn-sm"></i></span>' : message.message}</th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important">${message.file ? '<span type="button" class="audio-file"><i class="fa fa-file-audio btn btn-info btn-sm"></i></span>' : message.message}</th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Recipient</th>
-                                        <th scope="row" style="font-weight: normal"><code>${Array.isArray(message.recipient) ? message.recipient.join(', ') : ''}</code ></th >
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important"><code>${Array.isArray(message.recipient) ? message.recipient.join(', ') : ''}</code ></th >
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Status</th>
-                                        <th scope="row" style="font-weight: normal"><span class="badge badge-${sentStatus ? 'success' : 'danger'}">${sentStatus ? 'Sent' : 'Failed'}</span></th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important"><span class="badge badge-${sentStatus ? 'success' : 'danger'}">${sentStatus ? 'Sent' : 'Failed'}</span></th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Sender</th>
-                                        <th scope="row" style="font-weight: normal"><code>${message.sender}</code></th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important"><code>${message.sender}</code></th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Enable Schedule</th>
-                                        <th scope="row" style="font-weight: normal">${message.is_schedule ? 'Yes' : 'No'}</th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important">${message.is_schedule ? 'Yes' : 'No'}</th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Schedule Date</th>
-                                        <th scope="row" style="font-weight: normal">${message.schedule_date ? message.schedule_date : 'No date'}</th>
+                                        <th scope="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important">${message.schedule_date ? formatDate(message.schedule_date) : 'No date'}</th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Attachment Name</th>
-                                        <th scop;e="row" style="font-weight: normal">${message.file ? message.file.replace(/^.*[\\\/]/, '') : 'No file attached'}</th>
+                                        <th scop;e="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important">${message.file ? message.file.replace(/^.*[\\\/]/, '') : 'No file attached'}</th>
                                     </tr>
                                     <tr>
 
                                         <th scope="col">Attachment Path</th>
-                                        <th scop;e="row" style="font-weight: normal"><small>${message.file ? "\wwwroot" + message.file.split('wwwroot').pop().split(';')[0] : 'No file attached'} </small></th>
+                                        <th scop;e="row" style="font-weight: normal;border-top: 0px solid #dee2e6 !important"><small>${message.file ? "\wwwroot" + message.file.split('wwwroot').pop().split(';')[0] : 'No file attached'} </small></th>
                                     </tr>`;
-
-
-        //<button onclick-"play();" class="btn btn-info btn-sm" ><i class="fa fa-file"></i></button>
 
         $('#exampleModal').modal('show');
     });
@@ -604,4 +558,89 @@ const ProcessToDataTable = (dtId, dtHeight = 380) => {
             <div class="text pt-2">
                 <span data-toggle="tooltip" data-placement="top" title="Number of rows">Rows: <span class="text-theme">${dcount}</span></span>
             </div>`);
+}
+
+// Format Date
+const formatDate = (datetime) => {
+    var rtnDate = new Date(datetime).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric'
+    }).split(' ').join('-');
+
+    return rtnDate;
+}
+
+// Spinner 
+const Indicator = (data) => {
+    document.getElementById('loader-wrapper').style.display = "none";
+}
+
+// Time Ago Functions
+const timeAgoFunc = (dateParam) => {
+
+    if (!dateParam) {
+        return null;
+    }
+
+    const date = typeof dateParam === 'object' ? dateParam : new Date(dateParam);
+    const DAY_IN_MS = 86400000; // 24 * 60 * 60 * 1000
+    const today = new Date();
+    const yesterday = new Date(today - DAY_IN_MS);
+    const seconds = Math.round((today - date) / 1000);
+    const minutes = Math.round(seconds / 60);
+    const isToday = today.toDateString() === date.toDateString();
+    const isYesterday = yesterday.toDateString() === date.toDateString();
+    const isThisYear = today.getFullYear() === date.getFullYear();
+
+
+    if (seconds < 5) {
+        return 'now';
+    } else if (seconds < 60) {
+        return `${seconds} seconds ago`;
+    } else if (seconds < 90) {
+        return 'about a minute ago';
+    } else if (minutes < 60) {
+        return `${minutes} minutes ago`;
+    } else if (isToday) {
+        return getFormattedDate(date, 'Today'); // Today at 10:20
+    } else if (isYesterday) {
+        return getFormattedDate(date, 'Yesterday'); // Yesterday at 10:20
+    } else if (isThisYear) {
+        return getFormattedDate(date, false, true); // 10. January at 10:20
+    }
+
+    return getFormattedDate(date); // 10. January 2017. at 10:20
+}
+const getFormattedDate = (date, prefomattedDate = false, hideYear = false) => {
+
+    const MONTH_NAMES = [
+        'January', 'February', 'March', 'April', 'May', 'June',
+        'July', 'August', 'September', 'October', 'November', 'December'
+    ];
+
+    const day = date.getDate();
+    const month = MONTH_NAMES[date.getMonth()];
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    let minutes = date.getMinutes();
+
+    if (minutes < 10) {
+        // Adding leading zero to minutes
+        minutes = `0${minutes}`;
+    }
+
+    if (prefomattedDate) {
+        // Today at 10:20
+        // Yesterday at 10:20
+        return `${prefomattedDate} at ${hours}:${minutes}`;
+    }
+
+    if (hideYear) {
+        // 10. January at 10:20
+        return `${day}. ${month} at ${hours}:${minutes}`;
+    }
+
+    // 10. January 2017. at 10:20
+    return `${day}. ${month} ${year}. at ${hours}:${minutes}`;
 }
