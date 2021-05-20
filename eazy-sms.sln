@@ -14,6 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{12B6A436-71F8-4628-8A57-26918060EC88}"
+	ProjectSection(SolutionItems) = preProject
+		SqlQuery_1.sql = SqlQuery_1.sql
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easy.sms.test", "samples\easy.sms.test\easy.sms.test.csproj", "{5FC77221-68CA-4042-A1CE-115C723C84C2}"
 EndProject
