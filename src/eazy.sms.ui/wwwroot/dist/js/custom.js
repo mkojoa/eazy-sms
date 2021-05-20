@@ -309,6 +309,41 @@ const fetchDataToSMSTable = (data) => {
     // Initialize Datatables
     $.fn.dataTable.ext.classes.sPageButton = 'btn btn-outline-info btn-sm m-1 justify-content-center';
 
+    //let _BodyRows = "", _count = 0;
+    //data.forEach((sms) => {
+    //    _count += 1;
+
+
+    //    let message = JSON.parse(sms.message ? sms.message : '');
+
+
+    //    console.log(message)
+
+    //    _BodyRows += `
+    //            <tr>
+    //                <td scope="row">${_count}</td>
+    //                <td scope="row">${message.campaign}</td>
+    //                <td scope="row">${message.message}</td>
+    //                <td scope="row">${sms.updatedAt}</td>
+    //                <td scope="row">
+    //                    <span class="badge badge-${sms.sentStatus ? 'success' : 'danger'}">${sms.sentStatus ? 'Sent' : 'Failed'}</span>
+    //                </td>
+    //                <td scope="row">
+    //                    <div class="btn-group p-0 m-0">
+    //                        <button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
+    //                            <i class="fa fa-eye" title="view message details"></i>
+    //                        </button>
+    //                        <button class="btn btn-outline-success btn-sm">
+    //                            <i class="fa fa-redo" title="resend failed message"></i>
+    //                        </button>
+    //                    </div>
+    //                </td>
+    //            </tr>`;
+    //});
+    //$("#sms-table-body").html(_BodyRows);
+
+    //ProcessToDataTable("sms-table")
+
     var smsTable = $("#sms-table").DataTable({
         "deferRender": true,
         "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
@@ -370,7 +405,7 @@ const fetchDataToSMSTable = (data) => {
         },
         "aoColumns": [
             {
-                "mData": "#",
+                "mData": null,
             },
             {
                 "mData": "Subject",
@@ -424,12 +459,12 @@ const fetchDataToSMSTable = (data) => {
                 "render": function (data, type, sms) {
                     let c = JSON.parse(sms.message ? sms.message : '');
                     var t =
-                        `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
-                                <i class="fa fa-eye" title="view message details"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm">
-                                <i class="fa fa-redo" title="resend failed message"></i>
-                            </button>`;
+    `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
+            <i class="fa fa-eye" title="view message details"></i>
+        </button>
+        <button class="btn btn-outline-success btn-sm">
+            <i class="fa fa-redo" title="resend failed message"></i>
+        </button>`;
 
                     return t;
                 }
@@ -521,4 +556,52 @@ const fetchDataToSMSTable = (data) => {
 
         audio.play();
     });
+}
+
+const ProcessToDataTable = (dtId, dtHeight = 380) => {
+    let dtable = $(`#${dtId}`).DataTable({
+        "scrollY": `${dtHeight}px`,
+        "scrollCollapse": true,
+        "paging": false,
+        "scrollX": true,
+        "searching": true,
+        "ordering": true,
+        responsive: true,
+        dom: 'Bfrtip',
+        bInfo: false
+    });
+    //dtable.buttons().container().appendTo($('div#dt-toolbox'));
+
+
+
+    // Toolbox
+    $("div#dt-toolbox .dt-buttons")
+        .addClass("float-right")
+        .prop("style", "margin-bottom:0px!important;");
+
+
+
+    // Searchbox
+    $(".dataTables_filter").prop("hidden", true);
+    $("div#dt-searchbox").html(`
+            <div class="input-group">
+                <span class="input-group-addon text-theme">
+                    <i class="fa fa-search"></i>
+                </span>
+                <input type="text" class="form-control to-title-case" id="dt-searchbox-text" placeholder="Search..." />
+                <span class="input-group-addon text-theme cursor-pointer">
+                    Search
+                </span>
+            </div>`);
+    $("input#dt-searchbox-text").bind("keyup search input paste cut", () => {
+        let dt_fkey = $("input#dt-searchbox-text").val();
+        dtable.search(dt_fkey).draw();
+    });
+
+    // Countbox
+    let dcount = dtable.rows().count();
+    $("div#dt-countbox").html(`
+            <div class="text pt-2">
+                <span data-toggle="tooltip" data-placement="top" title="Number of rows">Rows: <span class="text-theme">${dcount}</span></span>
+            </div>`);
 }
