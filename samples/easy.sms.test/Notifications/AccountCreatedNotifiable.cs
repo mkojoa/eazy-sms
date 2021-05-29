@@ -5,6 +5,7 @@ using eazy.sms.Model;
 
 namespace easy.sms.test.Notifications
 {
+    //AccountCreated
     public class AccountCreatedNotifiable : Notifiable<AccountDto>
     {
         public AccountCreatedNotifiable(AccountDto accountDto)
