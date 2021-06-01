@@ -11,6 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		Contributors.md = Contributors.md
 		README.md = README.md
+		sms_dashboard.png = sms_dashboard.png
+		sms_dashboard_2.png = sms_dashboard_2.png
+		sms_database_error.png = sms_database_error.png
+		sms_info.png = sms_info.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{12B6A436-71F8-4628-8A57-26918060EC88}"

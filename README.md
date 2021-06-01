@@ -6,7 +6,19 @@ using mnotify sms gateway , etc.. in your `.netcore >= 3.1` applications.
 
 ###### SMS Providers
 - [X] [Mnotify](https://mnotify.com)
-- [ ] Dashboard - Resend failed SMS Message.
+- [X] Dashboard - Resend failed SMS Message.
+
+-  SMS Dashboard
+![SMS Dashboard](sms_dashboard.png?raw=true "SMS Dashboard")
+
+-  SMS Dashboard 2
+![SMS Dashboard](sms_dashboard_2.png?raw=true "SMS Dashboard 2")
+
+-  SMS DB Connection Error
+![SMS Dashboard](sms_database_error.png?raw=true "SMS DB Connection Error")
+
+-  SMS Info Details
+![SMS Dashboard](sms_info.png?raw=true "SMS Info Details")
 
 ###### SMS Channel
 - [X] SMS
