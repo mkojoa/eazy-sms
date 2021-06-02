@@ -224,14 +224,14 @@ const fetchDataToChatBar = (data) => {
         },
         series: [{
             name: 'Sent SMS',
-            data: [JanRecordSentFilter, FebRecordSentFilter, MarRecordSentFilter, AprRecordSentFilter, MayRecordSentFilter, JunRecordSentFilter, JulRecordSentFilter, AugRecordSentFilter, SepRecordSentFilter, NovRecordSentFilter, DecRecordSentFilter]
+            data: [JanRecordSentFilter, FebRecordSentFilter, MarRecordSentFilter, AprRecordSentFilter, MayRecordSentFilter, JunRecordSentFilter, JulRecordSentFilter, AugRecordSentFilter, SepRecordSentFilter, OctRecordSentFilter, NovRecordSentFilter, DecRecordSentFilter]
         }, {
             name: 'Failed SMS',
-            data: [JanRecordFailedFilter, FebRecordFailedFilter, MarRecordFailedFilter, AprRecordFailedFilter, MayRecordFailedFilter, JunRecordFailedFilter, JulRecordFailedFilter, AugRecordFailedFilter, SepRecordFailedFilter, NovRecordFailedFilter, DecRecordFailedFilter]
+                data: [JanRecordFailedFilter, FebRecordFailedFilter, MarRecordFailedFilter, AprRecordFailedFilter, MayRecordFailedFilter, JunRecordFailedFilter, JulRecordFailedFilter, AugRecordFailedFilter, SepRecordFailedFilter, OctRecordFailedFilter, NovRecordFailedFilter, DecRecordFailedFilter]
         },
         {
             name: 'Total SMS',
-            data: [JanRecordTotal, FebRecordTotal, MarRecordTotal, AprRecordTotal, MayRecordTotal, JunRecordTotal, JulRecordTotal, AugRecordTotal, SepRecordTotal, NovRecordTotal, DecRecordTotal]
+            data: [JanRecordTotal, FebRecordTotal, MarRecordTotal, AprRecordTotal, MayRecordTotal, JunRecordTotal, JulRecordTotal, AugRecordTotal, SepRecordTotal, OctRecordTotal, NovRecordTotal, DecRecordTotal]
         }],
         xaxis: {
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
@@ -263,41 +263,6 @@ const fetchDataToSMSTable = (data) => {
 
     // Initialize Datatables
     $.fn.dataTable.ext.classes.sPageButton = 'btn btn-outline-info btn-sm m-1 justify-content-center';
-
-    //let _BodyRows = "", _count = 0;
-    //data.forEach((sms) => {
-    //    _count += 1;
-
-
-    //    let message = JSON.parse(sms.message ? sms.message : '');
-
-
-    //    console.log(message)
-
-    //    _BodyRows += `
-    //            <tr>
-    //                <td scope="row">${_count}</td>
-    //                <td scope="row">${message.campaign}</td>
-    //                <td scope="row">${message.message}</td>
-    //                <td scope="row">${sms.createdAt}</td>
-    //                <td scope="row">
-    //                    <span class="badge badge-${sms.sentStatus ? 'success' : 'danger'}">${sms.sentStatus ? 'Sent' : 'Failed'}</span>
-    //                </td>
-    //                <td scope="row">
-    //                    <div class="btn-group p-0 m-0">
-    //                        <button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
-    //                            <i class="fa fa-eye" title="view message details"></i>
-    //                        </button>
-    //                        <button class="btn btn-outline-success btn-sm">
-    //                            <i class="fa fa-redo" title="resend failed message"></i>
-    //                        </button>
-    //                    </div>
-    //                </td>
-    //            </tr>`;
-    //});
-    //$("#sms-table-body").html(_BodyRows);
-
-    //ProcessToDataTable("sms-table")
 
     var smsTable = $("#sms-table").DataTable({
         "deferRender": true,
@@ -438,7 +403,7 @@ const fetchDataToSMSTable = (data) => {
 
     setInterval(function () {
         smsTable.ajax.reload();
-    }, 30000);
+    }, 40000);
 
     $(document).on('click', '.get--details', function () {
         let { id, message, createdAt, sentStatus, } = $(this).data('content');

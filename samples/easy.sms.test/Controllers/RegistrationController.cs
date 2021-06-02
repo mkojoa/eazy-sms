@@ -19,6 +19,32 @@ namespace easy.sms.test.Controllers
             _notification = notification;
         }
 
+        /// <summary>
+        /// Send Message without using notifiables
+        /// </summary>
+        /// <returns></returns>
+        [HttpPost("RawTest")]
+        public async Task<IActionResult> RawTest()
+        {
+            //Create new user
+            var accountUser = new AccountDto { Username = "Michael Ameyaw" };
+
+            //call this after creating user to send email
+            var sms = await _notification.NotifyAsync(
+                $"Hello {accountUser.Username}, This is direct test from RawTest method. thanks",
+                "Raw SMS Testing",
+                new[] { "0553771219" },
+                "Melteck",
+                "2021-04-08 06:00",
+                false,
+                new eazy.sms.Model.Attachment
+                {
+                    File = "" // full path 
+                });
+
+            return Ok(sms);
+        }
+
         [HttpPost("AccountRegistration")]
         public async Task<IActionResult> AccountRegistration()
         {
