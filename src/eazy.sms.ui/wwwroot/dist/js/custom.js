@@ -260,6 +260,7 @@ const fetchDataToChatBar = (data) => {
 const fetchDataToSMSTable = (data) => {
 
     const url = `${location.pathname.replace("/index.html", "")}/api/sms`;
+    
 
     // Initialize Datatables
     $.fn.dataTable.ext.classes.sPageButton = 'btn btn-outline-info btn-sm m-1 justify-content-center';
@@ -385,8 +386,8 @@ const fetchDataToSMSTable = (data) => {
                     var t =
                         `<button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-info btn-sm get--details">
                                 <i class="fa fa-eye" title="view message details"></i>
-                            </button>
-                            <button class="btn btn-outline-success btn-sm">
+                        </button>
+                        <button type="button" data-content='${JSON.stringify(sms)}' class="btn btn-outline-success btn-sm resend--details">
                                 <i class="fa fa-redo" title="resend failed message"></i>
                         </button>`;
 
@@ -467,6 +468,41 @@ const fetchDataToSMSTable = (data) => {
                                     </tr>`;
 
         $('#exampleModal').modal('show');
+    });
+
+
+    
+    $(document).on('click', '.resend--details', function () {
+        let { id, message, createdAt, sentStatus, } = $(this).data('content');
+
+        try {
+            message = JSON.parse(message ? message : '')
+        } catch (err) {
+            console.log(err)
+        }
+
+        //resend it again resend_sms_url
+        let xf = null;
+        $.get({
+            url: `${url}/resend`,
+            xhrFields: xf,
+            success: function (data) {
+                console.log(data)
+            }
+        }).fail(function (error) {
+            let errorElement = document.querySelector('#error');
+
+            if (error.status === 500) {
+                const x = JSON.parse(error.responseJSON.errorMessage);
+                errorElement.innerHTML = x.errorMessage
+                document.getElementById('loader-wrapper').style.display = "none"
+                $('#errorModal').modal('show');
+            } else {
+                errorElement.innerHTML = error.responseText
+                document.getElementById('loader-wrapper').style.display = "none"
+                $('#errorModal').modal('show');
+            }
+        });
     });
 
     // audio file

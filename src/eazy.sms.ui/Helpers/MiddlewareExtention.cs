@@ -142,6 +142,35 @@ namespace eazy.sms.ui.Helpers
                 return;
             }
 
+
+            //POST
+            if (httpMethod == "POST" && Regex.IsMatch(path, $"^/{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/api/sms/resend/?$",
+                RegexOptions.IgnoreCase))
+            {
+                //get api data
+                try
+                {
+                    httpContext.Response.ContentType = "application/json;charset=utf-8";
+
+                    var result = await PostSMSDataAsync(httpContext);
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.OK;
+                    await httpContext.Response.WriteAsync(result);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, ex.Message);
+                    httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+
+                    var errorMessage = httpContext.Request.IsLocal()
+                        ? JsonConvert.SerializeObject(new { errorMessage = ex.Message })
+                        : JsonConvert.SerializeObject(new { errorMessage = "Internal server error" });
+
+                    await httpContext.Response.WriteAsync(JsonConvert.SerializeObject(new { errorMessage }));
+                }
+
+                return;
+            }
+
             if (httpMethod == "GET" &&
                 Regex.IsMatch(path, $"^/?{Regex.Escape(_configuration.GetSection("EazyOptions:SMS:UI:RoutePrefix").Value)}/?$", RegexOptions.IgnoreCase))
             {
@@ -160,6 +189,16 @@ namespace eazy.sms.ui.Helpers
 
 
             await _staticFileMiddleware.Invoke(httpContext);
+        }
+
+        private async Task<string> PostSMSDataAsync(HttpContext httpContext)
+        {
+            var provider = httpContext.RequestServices.GetService<IDataProvider>();
+            var dataResult = await provider.CreateDataAsync(new Core.EfCore.Entity.EventMessage
+            {
+            });
+            var result = JsonConvert.SerializeObject(dataResult, _jsonSerializerOptions);
+            return result;
         }
 
         private async Task<string> FetchSMSDataAsync(HttpContext httpContext)
